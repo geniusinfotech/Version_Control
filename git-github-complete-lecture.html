@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git & GitHub Complete Lecture Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root{
+  --cream:#FAF6EE;
+  --paper:#FFFFFF;
+  --ink:#1C1B22;
+  --ink-soft:#5B5A66;
+  --rule:#E7E1D3;
+  --term-bg:#1B1A22;
+  --term-text:#E7E4F4;
+  --term-prompt:#7C7A8C;
+  --term-accent:#6CE0A4;
+  --accent-1:#4C5FD7;
+  --accent-2:#0E9F8B;
+  --accent-3:#E08A1F;
+  --accent-4:#D6336C;
+  --accent-5:#6741D9;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,h5{ font-family:'Space Grotesk',sans-serif; margin:0; font-weight:700; }
+h1{ font-size:42px; line-height:1.1; letter-spacing:-0.01em; }
+h2{ font-size:28px; margin-top:48px; margin-bottom:18px; }
+h3{ font-size:22px; margin-top:32px; margin-bottom:14px; }
+h4{ font-size:18px; margin-top:24px; margin-bottom:12px; }
+code, .mono{ font-family:'JetBrains Mono',monospace; }
+p{ margin:0 0 16px 0; }
+
+a{ color:var(--accent-1); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+
+.shell{ max-width:920px; margin:0 auto; padding:0 32px 80px; }
+
+/* sticky nav */
+.nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(250,246,238,0.94);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--rule);
+}
+.nav__inner{
+  max-width:920px; margin:0 auto; padding:14px 32px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav__brand{ font-weight:700; font-size:15px; letter-spacing:0.02em; }
+.nav__links{ display:flex; gap:18px; }
+.nav__links a{
+  font-size:13px; font-weight:600; color:var(--ink-soft);
+  text-decoration:none; white-space:nowrap;
+}
+.nav__links a:hover{ color:var(--ink); }
+
+/* hero */
+.hero{
+  padding:64px 0 32px;
+  background:linear-gradient(135deg, rgba(76,95,215,0.08) 0%, rgba(14,159,139,0.08) 100%);
+  border-radius:20px;
+  padding:56px 42px;
+  margin-bottom:56px;
+  text-align:center;
+}
+.hero h1{
+  margin-bottom:12px;
+  background:linear-gradient(135deg, var(--accent-1) 0%, var(--accent-5) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero .sub{ font-size:18px; color:var(--ink-soft); max-width:680px; margin:0 auto 0; }
+
+/* content sections */
+.section{
+  margin-bottom:56px;
+}
+.section__title{
+  display:inline-block;
+  font-size:32px;
+  margin-bottom:24px;
+  padding-bottom:10px;
+  border-bottom:3px solid;
+}
+
+.section--what .section__title{ border-color:var(--accent-1); }
+.section--why .section__title{ border-color:var(--accent-2); }
+.section--how .section__title{ border-color:var(--accent-3); }
+.section--where .section__title{ border-color:var(--accent-4); }
+.section--alt .section__title{ border-color:var(--accent-5); }
+
+/* cards */
+.card{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:14px;
+  padding:24px;
+  margin-bottom:20px;
+  box-shadow:0 8px 18px -14px rgba(0,0,0,0.12);
+}
+.card--highlight{
+  border-left:4px solid var(--accent-1);
+  background:#ECEEFB;
+}
+.card h4{
+  margin-top:0;
+  color:var(--accent-1);
+}
+
+/* terminal */
+.terminal{
+  background:var(--term-bg);
+  border-radius:12px;
+  overflow:hidden;
+  margin:20px 0;
+  box-shadow:0 12px 28px -16px rgba(0,0,0,0.35);
+}
+.terminal__bar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  background:#26242F;
+  border-bottom:1px solid #34323F;
+}
+.terminal__bar span{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:block;
+}
+.terminal__bar .r{ background:#F2625A; }
+.terminal__bar .y{ background:#F4BF50; }
+.terminal__bar .g{ background:#62C554; }
+.terminal__bar .label{
+  margin-left:8px;
+  font-size:12px;
+  color:#8B889A;
+  font-family:'JetBrains Mono',monospace;
+}
+.terminal__body{
+  padding:18px 20px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  color:var(--term-text);
+  overflow-x:auto;
+}
+.terminal__body .line{
+  margin-bottom:6px;
+  display:flex;
+  gap:8px;
+}
+.terminal__body .prompt{
+  color:var(--term-prompt);
+  flex-shrink:0;
+}
+.terminal__body .out{
+  color:var(--term-accent);
+}
+.terminal__body .cmt{
+  color:#7A788A;
+}
+
+/* boxes */
+.box{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:12px;
+  padding:20px;
+  margin:20px 0;
+}
+.box h4{
+  margin-top:0;
+  color:var(--ink);
+}
+.box--info{
+  background:#EEF9F7;
+  border-color:#C5E8E3;
+}
+.box--warning{
+  background:#FEF4E8;
+  border-color:#F3D8B8;
+}
+.box--code{
+  background:var(--term-bg);
+  border-color:#34323F;
+  color:var(--term-text);
+}
+
+/* definition list */
+.definitions{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:18px 24px;
+  margin:20px 0;
+}
+.definitions dt{
+  font-weight:700;
+  color:var(--accent-1);
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+}
+.definitions dd{
+  margin:0;
+  color:var(--ink-soft);
+}
+
+/* diagram */
+.diagram{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:12px;
+  padding:28px;
+  margin:24px 0;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  line-height:1.8;
+  overflow-x:auto;
+  color:#5B5A66;
+}
+.diagram .title{
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:16px;
+  display:block;
+}
+
+/* list styles */
+ul, ol{
+  margin:16px 0;
+  padding-left:24px;
+}
+li{
+  margin-bottom:10px;
+}
+
+/* table */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:20px 0;
+}
+th, td{
+  padding:12px;
+  text-align:left;
+  border-bottom:1px solid var(--rule);
+}
+th{
+  background:#F9F7F0;
+  font-weight:700;
+  color:var(--ink);
+}
+tr:hover{
+  background:#FDFAF4;
+}
+
+/* file structure */
+.file-tree{
+  background:var(--term-bg);
+  color:var(--term-text);
+  padding:18px 20px;
+  border-radius:12px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  margin:20px 0;
+  overflow-x:auto;
+}
+
+/* comparison table */
+.comparison{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;
+  margin:24px 0;
+}
+.comparison__item{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:12px;
+  padding:20px;
+  text-align:center;
+}
+.comparison__item h4{
+  margin-top:0;
+  color:var(--accent-1);
+}
+.comparison__item p{
+  font-size:14px;
+  margin-bottom:0;
+}
+
+/* footer */
+.closing{
+  margin-top:56px;
+  padding:40px 32px;
+  background:linear-gradient(135deg, var(--ink) 0%, #2F2C3E 100%);
+  color:#fff;
+  border-radius:16px;
+  text-align:center;
+}
+.closing h3{ margin-top:0; font-size:24px; }
+.closing p{ color:#C9C6D6; }
+
+/* responsive */
+@media (max-width:760px){
+  .nav__links{ display:none; }
+  .hero{ padding:32px 24px; }
+  h1{ font-size:32px; }
+  h2{ font-size:24px; }
+  .shell{ padding:0 20px 60px; }
+  .definitions{
+    grid-template-columns:1fr;
+  }
+  .comparison{
+    grid-template-columns:1fr;
+  }
+  table{
+    font-size:14px;
+  }
+  th, td{
+    padding:10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <div class="nav__brand">Git & GitHub Complete Lecture Guide</div>
+    <div class="nav__links">
+      <a href="#what">What is Git?</a>
+      <a href="#why">Why Git?</a>
+      <a href="#how">How It Works</a>
+      <a href="#where">Getting Started</a>
+      <a href="#alt">Alternatives</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <section class="hero">
+    <h1>Git & GitHub<br>Complete Lecture</h1>
+    <p class="sub">A comprehensive guide covering What, Why, How, Where, and alternatives — everything you need to know to become fluent with version control</p>
+  </section>
+
+  <!-- ========== WHAT IS GIT ========== -->
+  <section class="section section--what" id="what">
+    <h2 class="section__title">WHAT is Git and GitHub?</h2>
+
+    <h3>What is Git?</h3>
+    <p>Git is a <b>version control system (VCS)</b> — a software tool that lives on your computer and automatically tracks every single change made to your files. It's like having a detailed diary for your project where every entry is timestamped, labeled, and reversible.</p>
+
+    <p><b>In simple terms:</b> Git saves "snapshots" of your project at different points in time. Each snapshot (called a "commit") records who made the change, when they made it, what exactly changed, and why (via a message). You can view the entire history, jump back to any earlier version, or see exactly what changed between two versions.</p>
+
+    <div class="card card--highlight">
+      <h4>Real-World Analogy</h4>
+      <p>Imagine your college project file like this:</p>
+      <ul>
+        <li><code>assignment_v1.py</code></li>
+        <li><code>assignment_v2.py</code></li>
+        <li><code>assignment_FINAL.py</code></li>
+        <li><code>assignment_FINAL_final.py</code></li>
+        <li><code>assignment_submitted.py</code></li>
+      </ul>
+      <p>That's chaos. With Git, you have ONE file called <code>assignment.py</code>, and Git secretly keeps the entire history inside a hidden folder. You access old versions through commands, not by renaming files.</p>
+    </div>
+
+    <h3>What is GitHub?</h3>
+    <p>GitHub is a <b>website and online service</b> that stores Git repositories in the cloud. Think of it as a backup service and a social network for code:</p>
+    <ul>
+      <li><b>Backup:</b> Your project code lives safely on GitHub's servers, not just on your laptop</li>
+      <li><b>Collaboration:</b> Multiple people can work on the same project, see each other's changes, and merge them safely</li>
+      <li><b>Portfolio:</b> Your GitHub profile becomes a professional portfolio — companies judge developers by their GitHub contributions</li>
+      <li><b>Discovery:</b> You can find open-source projects, learn from others' code, and contribute improvements</li>
+    </ul>
+
+    <p><b>Key distinction:</b> Git is a tool that runs on your computer. GitHub is a website that hosts your Git repositories online. You can use Git without GitHub (just on your own computer), but GitHub requires Git to work.</p>
+
+    <h3>What Files Does Git Create?</h3>
+    <p>When you run <code>git init</code> in a folder, Git creates a hidden folder called <code>.git</code> inside your project. Let's look at what's inside:</p>
+
+    <div class="file-tree">
+<span class="title">your-project/
+├── src/
+│   └── main.py
+├── README.md
+└── .git/                    ← Hidden folder created by Git
+    ├── objects/             ← Where all commits are stored
+    ├── refs/                ← Pointers to branches
+    ├── HEAD                 ← Current branch pointer
+    ├── config               ← Your local config
+    └── ...other Git internals...</span>
+    </div>
+
+    <p>You almost never touch the <code>.git</code> folder directly — it's managed automatically by Git commands. Here's what each part does:</p>
+
+    <div class="definitions">
+      <dt>.git/objects/</dt>
+      <dd>Contains every snapshot (commit) of your project, compressed and stored as special Git objects. Each commit is a complete point-in-time copy of your entire project.</dd>
+
+      <dt>.git/refs/</dt>
+      <dd>Contains references to commits — pointers that Git uses to remember where each branch currently points to.</dd>
+
+      <dt>.git/HEAD</dt>
+      <dd>A file that tells Git which branch you're currently on. When you switch branches, this file is updated.</dd>
+
+      <dt>.git/config</dt>
+      <dd>Your local settings: username, email, remote URLs, etc.</dd>
+    </div>
+
+    <h3>What Files Should Be in Git?</h3>
+    <p>Not every file in your project should be stored in Git. Some files should be ignored:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Should Include</th>
+          <th>Should NOT Include</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Source code (.py, .js, .java)</td>
+          <td>Temporary files (__pycache__, .o, .class)</td>
+        </tr>
+        <tr>
+          <td>README.md, documentation</td>
+          <td>Build artifacts (bin/, dist/, build/)</td>
+        </tr>
+        <tr>
+          <td>Config files (if no secrets)</td>
+          <td>Secrets (.env files with passwords)</td>
+        </tr>
+        <tr>
+          <td>Project structure, tests</td>
+          <td>IDE settings (.vscode/, .idea/)</td>
+        </tr>
+        <tr>
+          <td>Database schemas</td>
+          <td>Large binary files (videos, datasets)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Git has a special file called <code>.gitignore</code> that lists patterns of files to ignore. For example:</p>
+
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">.gitignore</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="cmt"># Python</span></div>
+        <div class="line">__pycache__/</div>
+        <div class="line">*.pyc</div>
+        <div class="line">.env</div>
+        <div class="line"><span class="cmt"># IDE</span></div>
+        <div class="line">.vscode/</div>
+        <div class="line">.idea/</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ========== WHY GIT ========== -->
+  <section class="section section--why" id="why">
+    <h2 class="section__title">WHY Do We Use Git?</h2>
+
+    <h3>Problem 1: History and Accountability</h3>
+    <p><b>Without Git:</b> When a bug appears in production, how do you know when it was introduced? Who wrote it? What changed last week? You're stuck guessing.</p>
+    <p><b>With Git:</b> Every change has a timestamp, author name, and description. You can jump to the exact moment the bug was introduced and understand what changed.</p>
+
+    <h3>Problem 2: Collaboration Without Chaos</h3>
+    <p><b>Without Git:</b> When two developers edit the same file, who gets to save their version? You end up with files like:</p>
+    <ul>
+      <li><code>assignment_mine.py</code></li>
+      <li><code>assignment_rahul.py</code></li>
+      <li><code>assignment_merged.py</code></li>
+    </ul>
+    <p><b>With Git:</b> Multiple people can work on the same file simultaneously on different branches. Git automatically detects conflicts and helps you merge them intelligently.</p>
+
+    <h3>Problem 3: Undo Mistakes</h3>
+    <p><b>Without Git:</b> You accidentally delete 100 lines of working code. It's gone. Starting fresh.</p>
+    <p><b>With Git:</b> Every commit is a saved checkpoint. Delete anything by mistake? Revert to the previous commit in seconds.</p>
+
+    <div class="card">
+      <h4>Real Example: Undo a Mistake</h4>
+      <div class="terminal">
+        <div class="terminal__bar">
+          <span class="r"></span><span class="y"></span><span class="g"></span>
+          <span class="label">terminal</span>
+        </div>
+        <div class="terminal__body">
+          <div class="line"><span class="prompt">$</span><span>git log --oneline</span></div>
+          <div class="line out">a3f2d8e Fixed login bug</div>
+          <div class="line out">b9c4e1a Added user dashboard</div>
+          <div class="line out">c5d2f3b Initial project setup</div>
+          <div class="line"><span class="prompt">$</span><span>git revert a3f2d8e  <span class="cmt"># Undo that commit</span></span></div>
+          <div class="line out">✓ Reverted — now at b9c4e1a</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Problem 4: Experimentation Without Risk</h3>
+    <p><b>Without Git:</b> You want to try a new feature, but you're afraid to touch the working code. Stuck in "what if".</p>
+    <p><b>With Git:</b> Create a branch, experiment freely, and if it works, merge it. If it doesn't, discard the branch. The main code stays safe the entire time.</p>
+
+    <div class="box box--info">
+      <h4>Why It Matters for Your Career</h4>
+      <p>Every job posting for "software developer" or "programmer" assumes you know Git. It's not optional — it's a baseline expectation. Learning it in college makes you instantly more employable.</p>
+    </div>
+
+  </section>
+
+  <!-- ========== HOW GIT WORKS ========== -->
+  <section class="section section--how" id="how">
+    <h2 class="section__title">HOW Does Git Work Internally?</h2>
+
+    <h3>The Three States of a File in Git</h3>
+    <p>Every file in a Git project exists in one of three states at any given moment:</p>
+
+    <div class="comparison">
+      <div class="comparison__item">
+        <h4>Working Directory</h4>
+        <p>Your actual files on disk. You edit them here. Git is watching, but hasn't saved anything yet.</p>
+      </div>
+      <div class="comparison__item">
+        <h4>Staging Area</h4>
+        <p>A "waiting room" for changes. You tell Git which changes are ready to be saved using <code>git add</code>.</p>
+      </div>
+      <div class="comparison__item">
+        <h4>Git Repository</h4>
+        <p>The permanent history inside <code>.git/</code>. Once you <code>git commit</code>, changes are saved forever.</p>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <span class="title">The Git Workflow:</span>
+      <pre>
+[1] Edit your files in Working Directory
+                 ↓
+         $ git status
+    (Shows what changed)
+                 ↓
+[2] Stage changes with "git add"
+                 ↓
+         $ git commit -m "message"
+                 ↓
+[3] Commit saved to Repository (.git/)
+                 ↓
+         $ git push
+                 ↓
+[4] Uploaded to GitHub (Remote Repository)</pre>
+    </div>
+
+    <h3>How Commits Are Actually Stored</h3>
+    <p>When you run <code>git commit</code>, Git doesn't save "changes" — it saves a complete snapshot of your entire project at that moment. Here's how:</p>
+
+    <div class="card">
+      <h4>Example: Storing a Commit</h4>
+      <p><b>Your project at commit 1:</b></p>
+      <ul>
+        <li>main.py (100 lines)</li>
+        <li>config.json (20 lines)</li>
+        <li>README.md (50 lines)</li>
+      </ul>
+      <p>You edit main.py. Now it's 110 lines.</p>
+      <p><b>Your commit:</b> Git stores <b>the entire file</b> (all 110 lines) plus metadata (author, date, message, parent commit).</p>
+      <p><b>Then</b> you edit config.json.</p>
+      <p><b>Your next commit:</b> Git stores the new main.py (unchanged from before), the new config.json (modified), and the README.md (unchanged). This is a complete project snapshot.</p>
+    </div>
+
+    <div class="box box--info">
+      <h4>Why Store Full Copies?</h4>
+      <p>This sounds wasteful, but it's brilliant: Git can retrieve any version of your project by simply decompressing one folder. You can instantly jump to any commit without reconstructing it from a chain of edits.</p>
+    </div>
+
+    <h3>The Commit Graph: How Git Tracks History</h3>
+    <p>Every commit has:</p>
+    <ul>
+      <li><b>A unique ID (hash)</b> — a 40-character code like <code>a3f2d8e92c1b4e5f6g7h8i9j0k1l2m3n</code></li>
+      <li><b>A parent commit</b> — the commit it was based on (except the first commit)</li>
+      <li><b>Author info</b> — who made this commit</li>
+      <li><b>Timestamp</b> — when it was made</li>
+      <li><b>Message</b> — what changed and why</li>
+      <li><b>A complete snapshot</b> — all files and their content at that moment</li>
+    </ul>
+
+    <div class="diagram">
+      <span class="title">Commit History (A Linear Project):</span>
+      <pre>
+Commit 1: c5d2f3b (Initial project)
+  ↓ parent link
+Commit 2: b9c4e1a (Added user dashboard)
+  ↓ parent link
+Commit 3: a3f2d8e (Fixed login bug)
+  ↓ parent link
+Commit 4: f1e2d3c (Current — HEAD points here)</pre>
+    </div>
+
+    <h3>Branches: Parallel Timelines</h3>
+    <p>A branch is simply a pointer to a commit. The default branch is called <code>main</code>. When you create a new branch, you're creating a new pointer at the same spot:</p>
+
+    <div class="diagram">
+      <span class="title">Creating a Branch:</span>
+      <pre>
+main ──→ Commit a3f2d8e
+         ↓
+      Commit b9c4e1a
+         ↓
+      Commit c5d2f3c  ← (main and feature both point here initially)
+         ↓
+feature-login → Commit d4e5f6g (New work on feature branch)
+         ↓
+         Commit e5f6g7h
+         
+main is still at c5d2f3c (unchanged)
+feature-login moved to e5f6g7h</pre>
+    </div>
+
+    <p>This is why branches are safe: they're just pointers. The main branch stays completely untouched while you experiment on your feature branch.</p>
+
+    <h3>Merging: Combining Branches</h3>
+    <p>When you merge a branch back into main, Git finds the common ancestor of both branches and intelligently combines the changes:</p>
+
+    <div class="diagram">
+      <span class="title">Merging Branches:</span>
+      <pre>
+BEFORE MERGE:
+main ────────→ Commit c5d2f3c → (no further changes)
+
+feature-login→ Commit c5d2f3c → d4e5f6g → e5f6g7h
+
+AFTER: git merge feature-login
+main ────────→ c5d2f3c → (merges in all changes from feature)
+                ↓
+           → f7g8h9i (New merge commit)
+
+main and feature-login both point to f7g8h9i now</pre>
+    </div>
+
+    <h3>Local vs. Remote Repositories</h3>
+    <p>Your computer has a <b>local repository</b> (the <code>.git</code> folder). GitHub has a <b>remote repository</b>. They're connected but separate:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Local Repository</th>
+          <th>Remote Repository (GitHub)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lives on your computer</td>
+          <td>Lives on GitHub's servers</td>
+        </tr>
+        <tr>
+          <td>You see all your commits</td>
+          <td>You see your pushed commits</td>
+        </tr>
+        <tr>
+          <td>Works completely offline</td>
+          <td>Requires internet connection</td>
+        </tr>
+        <tr>
+          <td>Pushing = uploading to remote</td>
+          <td>Pulling = downloading from remote</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><b>Important:</b> When you <code>git push</code>, you're uploading commits from your local repository to the remote. When you <code>git pull</code>, you're downloading new commits from the remote to your local repository.</p>
+
+    <div class="box box--warning">
+      <h4>Why You Need Both Local and Remote</h4>
+      <p><b>Local repository:</b> You can work completely offline, commit frequently, and experiment. No internet needed.</p>
+      <p><b>Remote repository (GitHub):</b> Acts as a backup (what if your laptop crashes?), enables collaboration (teammates can download your work), and serves as a portfolio (companies can see your projects).</p>
+    </div>
+
+  </section>
+
+  <!-- ========== HOW TO START ========== -->
+  <section class="section section--where" id="where">
+    <h2 class="section__title">HOW To Start Using Git & GitHub</h2>
+
+    <h3>Step 1: Install Git</h3>
+    <p><b>Windows:</b> Download from <a href="https://git-scm.com" target="_blank">git-scm.com</a> and run the installer. Accept default options.</p>
+    <p><b>macOS/Linux:</b> Usually pre-installed. Check:</p>
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">terminal</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="prompt">$</span><span>git --version</span></div>
+        <div class="line out">git version 2.34.1</div>
+      </div>
+    </div>
+
+    <h3>Step 2: Configure Git (Your Identity)</h3>
+    <p>Tell Git who you are — every commit will be "signed" with this name and email:</p>
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">terminal</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="prompt">$</span><span>git config --global user.name "Your Name"</span></div>
+        <div class="line"><span class="prompt">$</span><span>git config --global user.email "your.email@example.com"</span></div>
+        <div class="line"><span class="cmt"># Verify:</span></div>
+        <div class="line"><span class="prompt">$</span><span>git config --list | grep user</span></div>
+        <div class="line out">user.name=Your Name</div>
+        <div class="line out">user.email=your.email@example.com</div>
+      </div>
+    </div>
+
+    <h3>Step 3: Create Your First Repository Locally</h3>
+    <p>Start with a folder on your computer:</p>
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">terminal</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="prompt">$</span><span>mkdir my-first-project</span></div>
+        <div class="line"><span class="prompt">$</span><span>cd my-first-project</span></div>
+        <div class="line"><span class="prompt">$</span><span>git init</span></div>
+        <div class="line out">Initialized empty Git repository in /path/to/my-first-project/.git/</div>
+        <div class="line"><span class="cmt"># Check that .git was created:</span></div>
+        <div class="line"><span class="prompt">$</span><span>ls -la | grep .git</span></div>
+        <div class="line out">drwxr-xr-x  12 user  staff  384 Jan 15 10:30 .git</div>
+      </div>
+    </div>
+
+    <h3>Step 4: Create Your First File and Commit</h3>
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">terminal</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="prompt">$</span><span>echo "# My First Project" > README.md</span></div>
+        <div class="line"><span class="prompt">$</span><span>git status</span></div>
+        <div class="line out">On branch main</div>
+        <div class="line out">Untracked files:</div>
+        <div class="line out">  README.md</div>
+        <div class="line"><span class="prompt">$</span><span>git add README.md</span></div>
+        <div class="line"><span class="prompt">$</span><span>git commit -m "Initial commit: add README"</span></div>
+        <div class="line out">[main (root-commit) a3f2d8e] Initial commit: add README</div>
+        <div class="line out"> 1 file changed, 1 insertion(+)</div>
+        <div class="line"><span class="prompt">$</span><span>git log</span></div>
+        <div class="line out">commit a3f2d8e92c1b4e5f6g7h8i9j0k1l2m3n</div>
+        <div class="line out">Author: Your Name &lt;your.email@example.com&gt;</div>
+        <div class="line out">Date:   Mon Jan 15 10:30:00 2024 +0000</div>
+        <div class="line out">Initial commit: add README</div>
+      </div>
+    </div>
+
+    <p><b>Congratulations!</b> You've made your first commit. It's saved in the <code>.git</code> folder forever.</p>
+
+    <h3>Step 5: Create a GitHub Account</h3>
+    <p>Go to <a href="https://github.com" target="_blank">github.com</a> and sign up. Choose a username like <code>firstname-lastname</code> (something you'd put on a resume).</p>
+
+    <h3>Step 6: Create a Repository on GitHub</h3>
+    <p>On GitHub, click "New repository":</p>
+    <ul>
+      <li><b>Repository name:</b> <code>my-first-project</code></li>
+      <li><b>Description:</b> Something short describing what it does</li>
+      <li><b>Public/Private:</b> Public (so recruiters can see it)</li>
+      <li><b>Initialize with README:</b> Leave unchecked (you already have one locally)</li>
+    </ul>
+    <p>Click "Create repository."</p>
+
+    <h3>Step 7: Connect Your Local Repository to GitHub</h3>
+    <p>GitHub will show you instructions. Follow them — they look like this:</p>
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">terminal</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="cmt"># Add GitHub as the remote source</span></div>
+        <div class="line"><span class="prompt">$</span><span>git remote add origin https://github.com/yourusername/my-first-project.git</span></div>
+        <div class="line"><span class="cmt"># Rename the branch to "main" (in case it's "master")</span></div>
+        <div class="line"><span class="prompt">$</span><span>git branch -M main</span></div>
+        <div class="line"><span class="cmt"># Push your commits to GitHub</span></div>
+        <div class="line"><span class="prompt">$</span><span>git push -u origin main</span></div>
+        <div class="line out">Enumerating objects: 3, done.</div>
+        <div class="line out">Writing objects: 100% (3/3), 234 bytes | 234.00 B/s, done.</div>
+        <div class="line out">Total 3 (delta 0), reused 0 (delta 0)</div>
+        <div class="line out">To github.com:yourusername/my-first-project.git</div>
+        <div class="line out"> * [new branch]      main -> main</div>
+      </div>
+    </div>
+
+    <p>Done! Refresh your GitHub page and you'll see your README.md file and commit history online.</p>
+
+    <h3>Step 8: The Basic Workflow (Daily Use)</h3>
+    <p>This is what you do every day:</p>
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">terminal</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="cmt"># 1. Edit files (in your text editor, not terminal)</span></div>
+        <div class="line"><span class="cmt"># 2. Check what changed:</span></div>
+        <div class="line"><span class="prompt">$</span><span>git status</span></div>
+        <div class="line out">Modified: README.md</span></div>
+        <div class="line"><span class="cmt"># 3. Stage changes:</span></div>
+        <div class="line"><span class="prompt">$</span><span>git add .</span></div>
+        <div class="line"><span class="cmt"># 4. Commit with a message:</span></div>
+        <div class="line"><span class="prompt">$</span><span>git commit -m "Update README with project description"</span></div>
+        <div class="line"><span class="cmt"># 5. Push to GitHub:</span></div>
+        <div class="line"><span class="prompt">$</span><span>git push</span></div>
+      </div>
+    </div>
+
+    <h3>Essential Commands Reference</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Command</th>
+          <th>What It Does</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>git init</code></td>
+          <td>Create a new repository</td>
+          <td><code>git init my-project</code></td>
+        </tr>
+        <tr>
+          <td><code>git clone</code></td>
+          <td>Download an existing repository</td>
+          <td><code>git clone https://github.com/user/repo.git</code></td>
+        </tr>
+        <tr>
+          <td><code>git status</code></td>
+          <td>See what files changed</td>
+          <td><code>git status</code></td>
+        </tr>
+        <tr>
+          <td><code>git add</code></td>
+          <td>Stage changes for commit</td>
+          <td><code>git add .</code></td>
+        </tr>
+        <tr>
+          <td><code>git commit</code></td>
+          <td>Save a snapshot</td>
+          <td><code>git commit -m "Added login feature"</code></td>
+        </tr>
+        <tr>
+          <td><code>git push</code></td>
+          <td>Upload to GitHub</td>
+          <td><code>git push origin main</code></td>
+        </tr>
+        <tr>
+          <td><code>git pull</code></td>
+          <td>Download from GitHub</td>
+          <td><code>git pull origin main</code></td>
+        </tr>
+        <tr>
+          <td><code>git branch</code></td>
+          <td>Create or list branches</td>
+          <td><code>git branch feature-login</code></td>
+        </tr>
+        <tr>
+          <td><code>git switch</code></td>
+          <td>Move to a branch</td>
+          <td><code>git switch feature-login</code></td>
+        </tr>
+        <tr>
+          <td><code>git merge</code></td>
+          <td>Combine branches</td>
+          <td><code>git merge feature-login</code></td>
+        </tr>
+        <tr>
+          <td><code>git log</code></td>
+          <td>View commit history</td>
+          <td><code>git log --oneline</code></td>
+        </tr>
+        <tr>
+          <td><code>git diff</code></td>
+          <td>See line-by-line changes</td>
+          <td><code>git diff</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </section>
+
+  <!-- ========== ALTERNATIVES ========== -->
+  <section class="section section--alt" id="alt">
+    <h2 class="section__title">Alternatives to Git & GitHub</h2>
+
+    <p>Git is the industry standard (used by 90%+ of companies), but alternatives exist. Here's why you should still learn Git:</p>
+
+    <h3>Other Version Control Systems</h3>
+
+    <div class="card">
+      <h4>Mercurial (Hg)</h4>
+      <p><b>How it differs:</b> Similar to Git but simpler syntax and design. Less distributed — originally designed more for centralized teams.</p>
+      <p><b>Used by:</b> Some companies, but much less common than Git.</p>
+      <p><b>Verdict:</b> Skip it unless specifically required by a job.</p>
+    </div>
+
+    <div class="card">
+      <h4>Subversion (SVN)</h4>
+      <p><b>How it differs:</b> Much older. Centralized model — all history lives on one server, not on your laptop.</p>
+      <p><b>Used by:</b> Legacy systems at older companies. Government/bank projects.</p>
+      <p><b>Verdict:</b> You might encounter it in a job, but it's dying out. Learning Git makes picking up SVN trivial.</p>
+    </div>
+
+    <div class="card">
+      <h4>Perforce</h4>
+      <p><b>How it differs:</b> Designed for extremely large projects (massive video game studios, automotive firmware). Proprietary and expensive.</p>
+      <p><b>Used by:</b> A few specialized industries only.</p>
+      <p><b>Verdict:</b> Overkill for most projects. Definitely not for learning.</p>
+    </div>
+
+    <h3>Alternatives to GitHub (Git Hosting)</h3>
+
+    <p>Git and GitHub are separate things. Git can be hosted on different platforms:</p>
+
+    <div class="comparison">
+      <div class="comparison__item">
+        <h4>GitLab</h4>
+        <p><b>Free tier:</b> Generous, includes CI/CD pipeline.</p>
+        <p><b>Privacy:</b> Can self-host on your own server.</p>
+        <p><b>For:</b> Teams wanting more control.</p>
+      </div>
+      <div class="comparison__item">
+        <h4>Gitea</h4>
+        <p><b>Free tier:</b> Lightweight self-hosted option.</p>
+        <p><b>Privacy:</b> You control everything.</p>
+        <p><b>For:</b> Private companies with security requirements.</p>
+      </div>
+      <div class="comparison__item">
+        <h4>Bitbucket</h4>
+        <p><b>Free tier:</b> Free for small teams.</p>
+        <p><b>Privacy:</b> Integrates with Jira for issue tracking.</p>
+        <p><b>For:</b> Teams using Atlassian tools.</p>
+      </div>
+    </div>
+
+    <div class="box box--info">
+      <h4>Reality Check</h4>
+      <p>GitHub is ubiquitous. When you interview at a company, they'll ask for your GitHub profile link. Learning alternatives is useful if you specifically need them, but GitHub is the safe default choice for your portfolio and college projects.</p>
+    </div>
+
+    <h3>Why Git (and GitHub) Are the Standard</h3>
+    <ul>
+      <li><b>Distributed:</b> Every person has a complete copy — no single point of failure</li>
+      <li><b>Speed:</b> All operations are fast because they're local</li>
+      <li><b>Branching:</b> Creating branches is lightweight and instant</li>
+      <li><b>Community:</b> Massive ecosystem of tools, integrations, and learning resources</li>
+      <li><b>Open-source:</b> Used by Linux, Python, JavaScript, and virtually every major open-source project</li>
+      <li><b>Industry standard:</b> 90%+ of job postings mention Git specifically</li>
+    </ul>
+
+    <div class="box box--warning">
+      <h4>The Bottom Line</h4>
+      <p>Learn Git and GitHub. This is non-negotiable for a career in software development. Every other option exists in niche scenarios. Your time is better spent mastering Git than exploring alternatives.</p>
+    </div>
+
+  </section>
+
+  <!-- ========== PRACTICAL EXAMPLES ========== -->
+  <section class="section">
+    <h2 class="section__title">Real Project Examples</h2>
+
+    <h3>Example 1: College Assignment (Solo Work)</h3>
+    <p>You're working on a Data Structures assignment alone:</p>
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">terminal</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="cmt"># Initialize the project</span></div>
+        <div class="line"><span class="prompt">$</span><span>git init DS-assignment-5</span></div>
+        <div class="line"><span class="prompt">$</span><span>cd DS-assignment-5</span></div>
+        <div class="line"><span class="cmt"># Start coding — make 3 commits:</span></div>
+        <div class="line"><span class="prompt">$</span><span>git commit -m "Implement LinkedList class"</span></div>
+        <div class="line"><span class="prompt">$</span><span>git commit -m "Add insert and delete methods"</span></div>
+        <div class="line"><span class="prompt">$</span><span>git commit -m "Fix bug in delete (was skipping node)"</span></div>
+        <div class="line"><span class="cmt"># Create GitHub repo and push</span></div>
+        <div class="line"><span class="prompt">$</span><span>git remote add origin https://github.com/you/DS-assignment-5.git</span></div>
+        <div class="line"><span class="prompt">$</span><span>git push -u origin main</span></div>
+        <div class="line"><span class="cmt"># Now your professor can grade it on GitHub</span></div>
+      </div>
+    </div>
+
+    <p><b>Benefits:</b></p>
+    <ul>
+      <li>You can see exactly when you fixed the bug (helpful during viva)</li>
+      <li>Your professor can see your progress</li>
+      <li>It's backed up on GitHub (no accidental laptop loss)</li>
+      <li>You have a portfolio piece to show recruiters</li>
+    </ul>
+
+    <h3>Example 2: Team Project (Group Work with Branches)</h3>
+    <p>Four students building a college management system together:</p>
+
+    <div class="diagram">
+      <span class="title">Team Workflow:</span>
+      <pre>
+Day 1: Rahul creates repo and main structure
+  $ git init college-mgmt
+  $ git commit -m "Initial project setup"
+  $ git push to GitHub
+
+Day 2: Rahul takes feature-login branch
+  $ git branch feature-login
+  $ git switch feature-login
+  (edits, commits...)
+  $ git push origin feature-login
+
+Day 2: Priya takes feature-enrollment
+  $ git clone https://github.com/rahul/college-mgmt
+  $ git branch feature-enrollment
+  $ git switch feature-enrollment
+  (edits, commits...)
+  $ git push origin feature-enrollment
+
+Day 3: Arjun takes feature-payments
+  $ git clone repo
+  $ git branch feature-payments
+  (works independently...)
+
+Day 5: Merge everything
+  Rahul: $ git switch main
+         $ git pull origin main
+         $ git merge feature-login
+         $ git merge feature-enrollment
+         $ git merge feature-payments
+         (resolve any conflicts)
+         $ git push origin main
+         ✓ Project complete!</pre>
+    </div>
+
+    <p><b>Why Git was essential here:</b></p>
+    <ul>
+      <li>Four people edited files simultaneously without overwriting each other</li>
+      <li>Rahul could review each branch's work before merging</li>
+      <li>Complete history of who wrote what</li>
+      <li>If Priya broke something, Rahul could revert just her branch</li>
+    </ul>
+
+  </section>
+
+  <!-- ========== COMMON MISTAKES ========== -->
+  <section class="section">
+    <h2 class="section__title">Common Mistakes (and How to Avoid Them)</h2>
+
+    <div class="card">
+      <h4>❌ Mistake 1: Committing Sensitive Files</h4>
+      <p><b>Problem:</b> You accidentally commit <code>.env</code> with your database password. Even if you delete it later, the password is forever in the history.</p>
+      <p><b>Solution:</b> Create a <code>.gitignore</code> file listing files to ignore:</p>
+      <div class="box box--code">
+        <pre>.env
+node_modules/
+__pycache__/
+.vscode/</pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>❌ Mistake 2: Huge Commits with Vague Messages</h4>
+      <p><b>Problem:</b> You commit 500 lines of code with message "Fixed stuff". Later, you can't remember what you did.</p>
+      <p><b>Solution:</b> Commit frequently (every 30 minutes), with clear messages:</p>
+      <ul>
+        <li>✓ "Add login validation"</li>
+        <li>✓ "Fix typo in error message"</li>
+        <li>✗ "Update code"</li>
+        <li>✗ "Random changes"</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h4>❌ Mistake 3: Not Pulling Before Pushing</h4>
+      <p><b>Problem:</b> Your teammate pushed changes to main, but you push your changes without pulling first. Conflict!</p>
+      <p><b>Solution:</b> Always pull before working:</p>
+      <div class="terminal">
+        <div class="terminal__bar">
+          <span class="r"></span><span class="y"></span><span class="g"></span>
+          <span class="label">terminal</span>
+        </div>
+        <div class="terminal__body">
+          <div class="line"><span class="prompt">$</span><span>git pull origin main</span></div>
+          <div class="line"><span class="cmt"># THEN make your changes</span></div>
+          <div class="line"><span class="prompt">$</span><span>git add . && git commit -m "..."</span></div>
+          <div class="line"><span class="prompt">$</span><span>git push origin main</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>❌ Mistake 4: Using <code>git reset --hard</code> on Shared Code</h4>
+      <p><b>Problem:</b> You use <code>git reset --hard HEAD~1</code> to undo a commit you already pushed. Now your teammates' local copies are inconsistent.</p>
+      <p><b>Solution:</b> Use <code>git revert</code> instead (creates a new commit that undoes the old one):</p>
+      <div class="terminal">
+        <div class="terminal__bar">
+          <span class="r"></span><span class="y"></span><span class="g"></span>
+          <span class="label">terminal</span>
+        </div>
+        <div class="terminal__body">
+          <div class="line"><span class="cmt"># Don't do this on shared code:</span></div>
+          <div class="line"><span class="prompt">$</span><span>git reset --hard HEAD~1</span></div>
+          <div class="line"><span class="cmt"># Do this instead:</span></div>
+          <div class="line"><span class="prompt">$</span><span>git revert HEAD</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>❌ Mistake 5: Waiting Too Long Between Commits</h4>
+      <p><b>Problem:</b> You code for 3 days without committing. Then something breaks — good luck figuring out what changed.</p>
+      <p><b>Solution:</b> Commit multiple times a day:</p>
+      <ul>
+        <li>Finished a function? Commit.</li>
+        <li>Fixed a bug? Commit.</li>
+        <li>Passing tests? Commit.</li>
+      </ul>
+      <p>More commits = finer history = easier debugging later.</p>
+    </div>
+
+  </section>
+
+  <!-- ========== PRACTICE EXERCISES ========== -->
+  <section class="section">
+    <h2 class="section__title">Try It Yourself: Practice Exercises</h2>
+
+    <div class="card">
+      <h4>Exercise 1: Your First Local Repository</h4>
+      <ol>
+        <li>Create a folder called <code>git-practice</code></li>
+        <li>Run <code>git init</code> inside it</li>
+        <li>Create a file called <code>hello.py</code> with some code</li>
+        <li>Stage and commit it: <code>git add hello.py && git commit -m "Initial commit"</code></li>
+        <li>View your commit history: <code>git log</code></li>
+        <li>Edit the file, stage, and commit again</li>
+        <li>View the difference: <code>git log --oneline</code></li>
+      </ol>
+      <p><b>Goal:</b> Get comfortable with the local workflow.</p>
+    </div>
+
+    <div class="card">
+      <h4>Exercise 2: Push to GitHub</h4>
+      <ol>
+        <li>Create a new repository on GitHub (call it "git-practice")</li>
+        <li>Follow GitHub's instructions to connect your local repo:</li>
+        <li><code>git remote add origin https://github.com/yourusername/git-practice.git</code></li>
+        <li><code>git branch -M main</code></li>
+        <li><code>git push -u origin main</code></li>
+        <li>Refresh your GitHub page — you should see your files and commit history online</li>
+      </ol>
+      <p><b>Goal:</b> Experience the full local-to-GitHub workflow.</p>
+    </div>
+
+    <div class="card">
+      <h4>Exercise 3: Branching and Merging</h4>
+      <ol>
+        <li>Create a new branch: <code>git branch feature-new</code></li>
+        <li>Switch to it: <code>git switch feature-new</code></li>
+        <li>Make changes and commit them</li>
+        <li>Switch back: <code>git switch main</code></li>
+        <li>Merge: <code>git merge feature-new</code></li>
+        <li>View the merged result in <code>git log</code></li>
+        <li>Delete the branch: <code>git branch -d feature-new</code></li>
+      </ol>
+      <p><b>Goal:</b> Understand branching and safe merging.</p>
+    </div>
+
+    <div class="card">
+      <h4>Exercise 4: Undo a Mistake</h4>
+      <ol>
+        <li>Make a commit with a typo in the message</li>
+        <li>Make another commit</li>
+        <li>View the history: <code>git log --oneline</code></li>
+        <li>Undo the first bad commit: <code>git revert &lt;commit-hash&gt;</code></li>
+        <li>View the history again — you should see a new "revert" commit</li>
+      </ol>
+      <p><b>Goal:</b> Learn how to safely undo mistakes.</p>
+    </div>
+
+  </section>
+
+  <div class="closing">
+    <h3>You're Ready to Start</h3>
+    <p>This lecture covers the foundation of version control. The best way to learn is by doing — open a terminal and start typing these commands. Within a few hours of hands-on practice, Git will feel natural.</p>
+    <p>Remember: every software developer in the world uses Git. Learning it now gives you a massive advantage going into internships and jobs.</p>
+  </div>
+
+</div>
+</body>
+</html>

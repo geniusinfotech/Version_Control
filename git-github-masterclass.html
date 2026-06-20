@@ -1,0 +1,2134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Git & GitHub Masterclass - Complete Guide for College Students
+    </title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Fira+Mono:wght@400;500;700&family=Lora:ital@0;1&display=swap");
+
+      :root {
+        --primary: #4f46e5;
+        --secondary: #10b981;
+        --accent: #f59e0b;
+        --danger: #ef4444;
+        --dark: #111827;
+        --text-dark: #1f2937;
+        --text-light: #6b7280;
+        --bg-light: #f9fafb;
+        --bg-white: #ffffff;
+        --border: #e5e7eb;
+        --code-bg: #1f2937;
+        --code-text: #e5e7eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        background: #f3f4f6;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Lora", serif;
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--text-dark);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        margin: 0;
+        color: var(--dark);
+      }
+
+      h1 {
+        font-size: 48px;
+        line-height: 1.1;
+        margin: 32px 0 16px;
+      }
+
+      h2 {
+        font-size: 32px;
+        margin: 48px 0 20px;
+        border-bottom: 3px solid var(--primary);
+        padding-bottom: 10px;
+      }
+
+      h3 {
+        font-size: 24px;
+        margin: 32px 0 16px;
+      }
+
+      h4 {
+        font-size: 20px;
+        margin: 24px 0 12px;
+      }
+
+      p {
+        margin: 0 0 16px 0;
+      }
+
+      a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      code,
+      .mono {
+        font-family: "Fira Mono", monospace;
+        background: var(--bg-light);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
+
+      /* Navigation */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--bg-white);
+        border-bottom: 1px solid var(--border);
+        z-index: 100;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar__inner {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .navbar__logo {
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--primary);
+      }
+
+      .navbar__links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .navbar__links a {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-light);
+        text-decoration: none;
+      }
+
+      .navbar__links a:hover {
+        color: var(--primary);
+      }
+
+      body {
+        padding-top: 60px;
+      }
+
+      /* Hero Section */
+      .hero {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        color: white;
+        padding: 80px 24px;
+        margin-top: -60px;
+        padding-top: 140px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        color: white;
+        font-size: 54px;
+        margin-bottom: 16px;
+        border: none;
+      }
+
+      .hero p {
+        font-size: 18px;
+        opacity: 0.95;
+        max-width: 600px;
+        margin: 0 auto 32px;
+      }
+
+      .hero .tags {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      /* Content Sections */
+      .section {
+        background: var(--bg-white);
+        padding: 48px;
+        margin: 40px auto;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+      }
+
+      .story-box {
+        background: #fef3c7;
+        border-left: 4px solid var(--accent);
+        padding: 20px;
+        margin: 24px 0;
+        border-radius: 6px;
+      }
+
+      .story-box h4 {
+        margin-top: 0;
+        color: var(--dark);
+      }
+
+      .warning-box {
+        background: #fee2e2;
+        border-left: 4px solid var(--danger);
+        padding: 20px;
+        margin: 24px 0;
+        border-radius: 6px;
+      }
+
+      .success-box {
+        background: #dbeafe;
+        border-left: 4px solid var(--primary);
+        padding: 20px;
+        margin: 24px 0;
+        border-radius: 6px;
+      }
+
+      .info-box {
+        background: #d1fae5;
+        border-left: 4px solid var(--secondary);
+        padding: 20px;
+        margin: 24px 0;
+        border-radius: 6px;
+      }
+
+      /* Terminal */
+      .terminal {
+        background: var(--code-bg);
+        color: var(--code-text);
+        padding: 24px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 24px 0;
+        font-family: "Fira Mono", monospace;
+        font-size: 13px;
+        line-height: 1.8;
+      }
+
+      .terminal .prompt {
+        color: #60a5fa;
+      }
+
+      .terminal .command {
+        color: var(--code-text);
+      }
+
+      .terminal .output {
+        color: #10b981;
+      }
+
+      .terminal .comment {
+        color: #9ca3af;
+        font-style: italic;
+      }
+
+      .terminal-label {
+        font-size: 11px;
+        color: #9ca3af;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      /* Code Block */
+      pre {
+        background: var(--code-bg);
+        color: var(--code-text);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: "Fira Mono", monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 20px 0;
+      }
+
+      /* Diagrams */
+      .diagram {
+        background: var(--bg-light);
+        border: 1px solid var(--border);
+        padding: 24px;
+        border-radius: 8px;
+        font-family: "Fira Mono", monospace;
+        font-size: 12px;
+        line-height: 1.8;
+        overflow-x: auto;
+        margin: 24px 0;
+        color: var(--text-dark);
+      }
+
+      .diagram-title {
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: var(--primary);
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 24px 0;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      thead {
+        background: var(--bg-light);
+      }
+
+      th {
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid var(--border);
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      tr:hover {
+        background: var(--bg-light);
+      }
+
+      /* Lists */
+      ul,
+      ol {
+        margin: 16px 0;
+        padding-left: 24px;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      /* Comparison Grid */
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin: 24px 0;
+      }
+
+      .comparison-card {
+        background: var(--bg-light);
+        padding: 20px;
+        border-radius: 8px;
+        border-top: 3px solid var(--primary);
+      }
+
+      .comparison-card h4 {
+        margin-top: 0;
+      }
+
+      /* Steps */
+      .steps {
+        display: grid;
+        gap: 24px;
+        margin: 24px 0;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 16px;
+      }
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .step-content h4 {
+        margin-top: 0;
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--dark);
+        color: white;
+        padding: 40px 24px;
+        text-align: center;
+        margin-top: 80px;
+      }
+
+      .footer p {
+        margin: 8px 0;
+      }
+
+      b {
+        font-weight: 900;
+        color: darkblue;
+      }
+      i {
+        font-style: italic;
+        color: var(--text-light);
+      }
+      /* Responsive */
+      @media (max-width: 768px) {
+        .navbar__links {
+          display: none;
+        }
+
+        h1 {
+          font-size: 32px;
+        }
+
+        h2 {
+          font-size: 24px;
+        }
+
+        .hero {
+          padding: 60px 20px;
+          padding-top: 100px;
+        }
+
+        .section {
+          padding: 24px;
+          margin: 20px auto;
+        }
+
+        table {
+          font-size: 13px;
+        }
+
+        th,
+        td {
+          padding: 8px;
+        }
+
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .terminal {
+          font-size: 12px;
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar__inner">
+        <div class="navbar__logo">Git & GitHub</div>
+        <div class="navbar__links">
+          <a href="#what">What</a>
+          <a href="#why">Why</a>
+          <a href="#how">How</a>
+          <a href="#start">Start</a>
+          <a href="#team">Team Work</a>
+          <a href="#advanced">Advanced</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <h1>Master Git & GitHub</h1>
+      <p>
+        The complete masterclass for college students — from zero to
+        professional developer with real-world team scenarios
+      </p>
+      <div class="tags">
+        <span class="tag">30+ Hours</span>
+        <span class="tag">100% Free</span>
+        <span class="tag">Real Examples</span>
+        <span class="tag">Practical Skills</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- ============ WHAT IS GIT ============ -->
+      <section class="section" id="what">
+        <h2>WHAT: Understanding Git & GitHub</h2>
+
+        <h3>The Problem Before Git</h3>
+        <p>
+          Imagine you and your three college classmates are building a
+          final-year project together. Let's call them:
+        </p>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+          "
+        >
+          <div
+            style="
+              background: var(--bg-light);
+              padding: 16px;
+              border-radius: 8px;
+              text-align: center;
+            "
+          >
+            <strong style="font-size: 18px">Rahul</strong><br />
+            <span style="color: var(--text-light)">Frontend Dev</span>
+          </div>
+          <div
+            style="
+              background: var(--bg-light);
+              padding: 16px;
+              border-radius: 8px;
+              text-align: center;
+            "
+          >
+            <strong style="font-size: 18px">Priya</strong><br />
+            <span style="color: var(--text-light)">Backend Dev</span>
+          </div>
+          <div
+            style="
+              background: var(--bg-light);
+              padding: 16px;
+              border-radius: 8px;
+              text-align: center;
+            "
+          >
+            <strong style="font-size: 18px">Arjun</strong><br />
+            <span style="color: var(--text-light)">Database Dev</span>
+          </div>
+          <div
+            style="
+              background: var(--bg-light);
+              padding: 16px;
+              border-radius: 8px;
+              text-align: center;
+            "
+          >
+            <strong style="font-size: 18px">Anaya</strong><br />
+            <span style="color: var(--text-light)">Project Lead</span>
+          </div>
+        </div>
+
+        <h4>Problem 1: Lost Work</h4>
+        <p>
+          Rahul finishes the login page on day 1. On day 2, he makes more
+          changes but realizes the new code has a bug. The original working
+          version is gone forever.
+        </p>
+
+        <h4>Problem 2: Chaos File Names</h4>
+        <p>To avoid losing work, they start creating files like:</p>
+        <ul>
+          <li><code>project.zip</code></li>
+          <li><code>project_v2.zip</code></li>
+          <li><code>project_final.zip</code></li>
+          <li><code>project_FINAL_use_this_one.zip</code></li>
+          <li><code>project_rahul_fixed_v3.zip</code></li>
+        </ul>
+
+        <h4>Problem 3: Collaboration Nightmare</h4>
+        <p>
+          All four send their <code>app.py</code> via email. Now Anaya has four
+          different versions with the same filename. Which one has Priya's
+          database code? Which has Rahul's UI? Who overwrote whose work?
+        </p>
+
+        <h4>Problem 4: No History</h4>
+        <p>
+          Two weeks later, a feature stops working. Who broke it? When? Why?
+          There's no way to find out.
+        </p>
+
+        <h4>Problem 5: No Backup</h4>
+        <p>
+          Arjun's laptop crashes. All his database code is gone. The project is
+          stuck.
+        </p>
+
+        <div class="warning-box">
+          <h4>⚠️ This is how 90% of college projects fail</h4>
+          <p>
+            Without version control, teams spend more time managing file chaos
+            than actually coding.
+          </p>
+        </div>
+
+        <!-- Solution: Version Control -->
+        <h3>The Soluation: Version Control</h3>
+        <p>
+          Version control is a system that automatically tracks every change
+          made to a file, so you can see what changed, who changed it, and go
+          back to any earlier version — without ever renaming a file.
+        </p>
+
+        <h3>Local, Centralized and Distributed Version Control Systems</h3>
+        <p>
+          <b>Local VCS:</b> A simple database on your computer that tracks
+          changes. No collaboration features. Example: RCS (1980s). Rarely used
+          today. Keeps history on your local machine only. If your computer
+          crashes, you lose everything. - <i>like a personal diary</i>.
+        </p>
+
+        <p>
+          <b>Centralized VCS:</b> A single server stores all versions of the
+          project. Developers check out files from this central place. Example:
+          CVS, Subversion (SVN). Collaboration is possible, but if the central
+          server goes down, no one can save changes or access history. -
+          <i>like one library book the whole class shares.</i>
+        </p>
+
+        <p>
+          <b>Distributed VCS:</b> Every developer has a complete copy of the
+          entire project history on their own machine. Example: Git, Mercurial.
+          Collaboration is seamless, and there's no single point of failure. -
+          <i>like everyone having their own complete photocopy of that book</i>.
+        </p>
+
+        <h3>Distributed VCS Types</h3>
+        <p>
+          <b> 1. Git & Github:</b> Created by Linus Torvalds in 2005 for Linux
+          kernel development. Fast, efficient, and widely adopted. Uses a unique
+          snapshot-based model. -
+          <i
+            >like a supercharged version of a personal diary with branching
+            timelines.</i
+          >
+        </p>
+
+        <p>
+          <b>2. Mercurial:</b> Similar to Git but with a simpler design. Less
+          popular than Git but still used in some projects. -
+          <i>like a more straightforward diary without branching.</i>
+        </p>
+
+        <p>
+          <b>3. Fossil:</b> An integrated VCS that includes bug tracking and
+          wiki features. Used by SQLite. -
+          <i>like a diary that also has built-in to-do lists and notes.</i>
+        </p>
+
+        <p>
+          <b>4. Bazaar:</b> Developed by Canonical (Ubuntu). Focuses on
+          simplicity and ease of use. Less popular than Git. -
+          <i>like a diary designed for beginners.</i>
+        </p>
+
+        <p>
+          <b>5. Perforce:</b> A commercial VCS used in large enterprises and
+          game development. Handles large binary files well. -
+          <i>like a diary that can also store photos and videos.</i>
+        </p>
+
+        <p>
+          <b>6. BitKeeper:</b> A commercial VCS that was used for Linux kernel
+          development before Git. -
+          <i>like a diary that was once popular but is now mostly replaced.</i>
+        </p>
+
+        <p>
+          <b>7. Darcs:</b> A VCS based on a unique patch-based model. Less
+          popular than Git. -
+          <i
+            >like a diary that focuses on the individual changes rather than
+            snapshots.</i
+          >
+        </p>
+
+        <p>
+          <b>Azure Git</b> - A cloud-based Git repository service provided by
+          Microsoft Azure. It offers Git version control along with additional
+          features for collaboration, continuous integration, and deployment. -
+          <i
+            >like a diary that is stored in the cloud with extra tools for team
+            projects.</i
+          >
+        </p>
+
+        <!-- What is Git and GitHub? -->
+        <h3>What is Git?</h3>
+        <p>
+          Git is a <b>version control system (VCS)</b> — a software tool that
+          lives on your computer and automatically tracks every single change
+          made to your files. It's like having a detailed diary for your project
+          where every entry is timestamped, labeled, and reversible.
+        </p>
+
+        <p>
+          <b>In simple terms:</b> Git saves "snapshots" of your project at
+          different points in time. Each snapshot (called a "commit") records
+          who made the change, when they made it, what exactly changed, and why
+          (via a message). You can view the entire history, jump back to any
+          earlier version, or see exactly what changed between two versions.
+        </p>
+
+        <p>
+          <b> Git</b> is a program you install on your computer. It tracks
+          changes to your files locally on your machine.
+          <b>Simple Analogy: </b> Git is like your personal notebook where you
+          write your work and keep every draft. You can flip back to any page,
+          see who wrote what, and even erase mistakes without losing the entire
+          notebook.
+        </p>
+
+        <p>Think of it as:</p>
+        <ul>
+          <li>
+            <strong>A time machine:</strong> Go back to any previous version
+            instantly
+          </li>
+          <li>
+            <strong>A team notebook:</strong> See exactly who changed what,
+            when, and why
+          </li>
+          <li>
+            <strong>A safety net:</strong> Experiment freely without breaking
+            working code
+          </li>
+          <li>
+            <strong>An insurance policy:</strong> Every change is backed up
+            forever
+          </li>
+        </ul>
+
+        <h3>What is GitHub?</h3>
+        <p>
+          <strong>GitHub</strong> is a website (github.com) where you store your
+          Git projects online. It's like Google Drive, but specifically designed
+          for code and collaboration.
+        </p>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4>Git</h4>
+            <p>
+              Software on your computer that tracks changes locally. Works
+              completely offline.
+            </p>
+          </div>
+          <div class="comparison-card">
+            <h4>GitHub</h4>
+            <p>
+              Website where you backup your Git projects online. Enables team
+              collaboration and serves as your developer portfolio.
+            </p>
+          </div>
+        </div>
+
+        <div class="success-box">
+          <h4>✓ Key Insight</h4>
+          <p>
+            You can use Git without GitHub (just tracking files locally). But
+            you can't use GitHub without Git (GitHub uses Git to work). They're
+            complementary tools.
+          </p>
+        </div>
+
+        <h3>How They Work Together</h3>
+
+        <div class="diagram">
+          <div class="diagram-title">Your Team's Workflow:</div>
+          <pre>
+Rahul's Laptop          GitHub.com          Priya's Laptop
+(Local Git)          (Remote Backup)        (Local Git)
+     |                    |                      |
+     |--- git push ------>|                      |
+     |                    |                      |
+     |<--- git pull ------|<----- git push ------|
+     |                    |                      |
+     |                  Arjun clones
+     |                    |
+     |<---git clone-------|
+     |
+   (Now Arjun has complete copy of project)</pre
+          >
+        </div>
+
+        <h3>What Files Does Git Create?</h3>
+        <p>
+          When you run <code>git init</code>, Git creates a hidden folder called
+          <code>.git</code> inside your project. This folder contains:
+        </p>
+
+        <pre
+          style="
+            background: var(--code-bg);
+            border-left: 3px solid var(--primary);
+          "
+        >
+your-project/
+├── src/
+│   └── main.py
+├── README.md
+└── .git/                    ← Git's database (don't touch this!)
+    ├── objects/             ← Every version of every file
+    ├── refs/                ← Pointers to branches
+    ├── HEAD                 ← Your current branch
+    ├── config               ← Your local settings
+    └── ...other Git files...</pre
+        >
+
+        <p>
+          The <code>.git</code> folder is where Git stores the entire history.
+          You should never edit it manually — Git does everything automatically.
+        </p>
+
+        <h3>What Should Be In Git vs. What Shouldn't</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>✓ Include in Git</th>
+              <th>✗ Don't Include</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Source code (.py, .js, .java)</td>
+              <td>Passwords, API keys, .env files</td>
+            </tr>
+            <tr>
+              <td>README.md, documentation</td>
+              <td>node_modules/, venv/, .vscode/</td>
+            </tr>
+            <tr>
+              <td>Project config files</td>
+              <td>Compiled files (__pycache__, .o)</td>
+            </tr>
+            <tr>
+              <td>Database schemas</td>
+              <td>Large binary files (videos, data)</td>
+            </tr>
+            <tr>
+              <td>Tests and test data</td>
+              <td>IDE-specific settings</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Special Files into Git</h3>
+        <p>1.<code>gitignore</code></p>
+        <p>You tell Git what to ignore using a special file called</p>
+        <p>
+          <b> The Simple Idea:</b> Imagine you are packing a suitcase for a
+          trip. You want your clothes, but you don't want to pack your household
+          trash or your private diary. .gitignore is a checklist you give to Git
+          that says, "Do not touch or pack these items."
+        </p>
+
+        <pre>
+# .gitignore file
+passwords.txt
+config.env
+node_modules/
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+            </pre
+        >
+
+        <p>2. <code>.gitattributes</code></p>
+        <p>
+          The <code>.gitattributes</code> file allows you to define attributes
+          for paths in your repository. This is useful for specifying how Git
+          should handle certain files, such as setting line endings or marking
+          them as binary.
+        </p>
+        <p>
+          <b>The Simple Idea: </b> Imagine two people are writing a book
+          together, but one uses a pencil and the other uses a pen. It creates a
+          messy look. .gitattributes is a small rule book that forces everyone’s
+          computer to format the code exactly the same way so it looks neat.
+        </p>
+        <pre>
+# .gitattributes file
+my-website/
+├── .gitattributes      -- Put it in the root folder
+├── .gitignore
+├── index.html
+└── logo.png
+        </pre>
+        <pre>
+# 1. Handle line endings automatically for all text files
+# This prevents Windows vs Mac formatting bugs
+* text=auto
+
+# 2. Explicitly force code files to use standard Linux/Mac line endings (LF)
+*.js text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+
+# 3. Tell Git that images and archives are binary data
+# This stops Git from accidentally trying to modify or merge them like text
+*.png binary
+*.jpg binary
+*.zip binary
+        </pre>
+
+        <p>3. <code>.gitkeep</code></p>
+        <p>
+          Git does not track empty folders. If you want to keep an empty folder
+          in your repository, you can add a placeholder file called
+          <code>.gitkeep</code> inside it. This tells Git to include the folder
+          even though it's empty.
+        </p>
+        <p>
+          <b>The Simple Idea:</b> Git is a mail carrier that only delivers
+          packages with items inside. If you give Git an empty cardboard box, it
+          throws it away because it thinks it's useless. But what if you need
+          that empty box waiting at the destination? You put a tiny rock inside
+          it so Git carries it. That rock is .gitkeep.
+        </p>
+        <pre>
+my-website/
+├── public/
+│   └── uploads/
+│       └── .gitkeep     -- This blank file forces Git to track the folder
+├── index.html
+└── styles.css
+        </pre>
+        <pre>
+# 1. Navigate to your empty folder
+cd public/uploads
+
+# 2. Create the blank file
+touch .gitkeep
+        </pre>
+      </section>
+
+      <!-- ============ WHY GIT ============ -->
+      <section class="section" id="why">
+        <h2>WHY: The Real Benefits</h2>
+
+        <h3>Reason 1: Complete Project History</h3>
+        <p>
+          <strong>Without Git:</strong> A bug appears in production. You have no
+          idea when it started or who introduced it. Debugging nightmare.
+        </p>
+        <p>
+          <strong>With Git:</strong> Every change is timestamped with the
+          author's name, a description of what changed, and why. You can jump to
+          the exact moment the bug was introduced.
+        </p>
+
+        <div class="story-box">
+          <h4>Real Example: Finding the Bug</h4>
+          <p>
+            Arjun's database query is returning wrong results. Instead of
+            panicking, Anaya runs:
+          </p>
+          <p><code>git log --oneline</code></p>
+          <p>
+            She sees all commits in order. She finds "Fix query to exclude
+            inactive users" from 2 days ago. That's when the bug started! She
+            opens that commit and sees exactly what changed.
+          </p>
+        </div>
+
+        <h3>Reason 2: Safe Collaboration</h3>
+        <p>
+          <strong>Without Git:</strong> All four team members edit the same
+          <code>app.py</code> file. Last person to save wins. Everyone else's
+          work is overwritten.
+        </p>
+        <p>
+          <strong>With Git:</strong> Each person works on their own branch. Git
+          automatically detects and manages changes. No overwriting. No lost
+          work.
+        </p>
+
+        <h3>Reason 3: Experiment Without Fear</h3>
+        <p>
+          <strong>Without Git:</strong> Rahul wants to try a new UI design. But
+          if it fails, he loses the working version. He's paralyzed by fear.
+        </p>
+        <p>
+          <strong>With Git:</strong> Rahul creates a
+          <code>feature-new-design</code> branch. He experiments freely. If it
+          works, merge it. If not, delete the branch. The main code stayed safe
+          the entire time.
+        </p>
+
+        <div class="diagram">
+          <div class="diagram-title">Branching Safety:</div>
+          <pre>
+main branch (always working):
+  v1.0 ─── v1.1 ─── v1.2 ─── (stays stable)
+                  \
+feature branch:    new-ui-v1 ─── new-ui-v2 ─── new-ui-v3
+                   (experiment in safety)
+
+If new-ui works: merge it into main
+If it fails: just delete the branch, main was never touched!</pre
+          >
+        </div>
+
+        <h3>Reason 4: Undo Mistakes Instantly</h3>
+        <p>
+          <strong>Without Git:</strong> Arjun accidentally deletes 100 lines of
+          critical database code. It's gone. Panicking.
+        </p>
+        <p>
+          <strong>With Git:</strong> Every version is saved. Simply "revert" to
+          the previous commit. The code is back in seconds.
+        </p>
+
+        <h3>Reason 5: Your Professional Portfolio</h3>
+        <p>
+          Every job posting in software development mentions Git. In interviews,
+          companies ask: "Show me your GitHub profile."
+        </p>
+
+        <div class="info-box">
+          <h4>💼 Career Impact</h4>
+          <p>
+            Recruiters judge developers by their GitHub contributions. A strong
+            GitHub profile with well-documented projects can land you
+            internships and jobs before you even graduate.
+          </p>
+        </div>
+
+        <h3>Reason 6: Accountability Without Blame</h3>
+        <p>
+          Git records who wrote every line of code, when, and why. This isn't
+          about blame — it's about context. When someone asks "Why was this code
+          written this way?" you can explain the reasoning from the commit
+          message.
+        </p>
+
+        <h3>The Reality Check</h3>
+        <p>
+          Git is not optional. It's a baseline expectation in the software
+          industry. Every company — from startups to Google — uses version
+          control. Learning it in college makes you instantly more employable.
+        </p>
+      </section>
+
+      <!-- ============ GETTING STARTED ============ -->
+      <section class="section" id="start">
+        <h2>START: Your First Repository</h2>
+
+        <h3>Step 1: Install Git</h3>
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4>Windows</h4>
+            <ol>
+              <li>
+                Visit
+                <a href="https://git-scm.com" target="_blank">git-scm.com</a>
+              </li>
+              <li>Click "Download for Windows"</li>
+              <li>Run the installer, click Next on everything</li>
+              <li>Now you have "Git Bash" — your terminal</li>
+            </ol>
+          </div>
+          <div class="comparison-card">
+            <h4>macOS</h4>
+            <ol>
+              <li>Open Terminal</li>
+              <li>Type: <code>git --version</code></li>
+              <li>Usually pre-installed!</li>
+              <li>If not, macOS will prompt you to install</li>
+            </ol>
+          </div>
+          <div class="comparison-card">
+            <h4>Linux</h4>
+            <ol>
+              <li>Ubuntu/Debian: <code>sudo apt install git</code></li>
+              <li>Fedora: <code>sudo dnf install git</code></li>
+              <li>Done! Git is ready</li>
+            </ol>
+          </div>
+        </div>
+
+        <h3>Step 2: Create a GitHub Account</h3>
+        <p>
+          Go to <a href="https://github.com" target="_blank">github.com</a> and
+          sign up. Use your actual name — this is your professional identity.
+        </p>
+        <div class="success-box">
+          <h4>✓ Username Tip</h4>
+          <p>
+            Choose something professional like <code>rahul-kumar</code> or
+            <code>rahulkumar</code>. Recruiters will see this URL on your
+            resume, so make it look good!
+          </p>
+        </div>
+
+        <h3>Step 3: Configure Git (Tell It Who You Are)</h3>
+        <p>
+          Git needs to know your name and email — every commit will be "signed"
+          with this info.
+        </p>
+        <div class="terminal">
+          <div class="terminal-label">Terminal</div>
+          <span class="prompt">$</span>
+          <span class="command"
+            >git config --global user.name "Rahul Kumar"</span
+          ><br />
+          <span class="prompt">$</span>
+          <span class="command"
+            >git config --global user.email "rahul@example.com"</span
+          ><br />
+          <br />
+          <span class="comment"># Verify it worked:</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git config --list | grep user</span><br />
+          <span class="output">user.name=Rahul Kumar</span><br />
+          <span class="output">user.email=rahul@example.com</span>
+        </div>
+        <div class="warning-box">
+          <h4>⚠️ Email Must Match GitHub</h4>
+          <p>
+            When you later create a GitHub account, use the same email you set
+            here. This is how GitHub links your commits to your profile.
+          </p>
+        </div>
+
+        <h3>Step 4: Create Your First Local Repository</h3>
+        <div class="terminal">
+          <div class="terminal-label">Terminal</div>
+          <span class="comment"># Create a project folder</span><br />
+          <span class="prompt">$</span>
+          <span class="command">mkdir my-college-project</span><br />
+          <span class="prompt">$</span>
+          <span class="command">cd my-college-project</span><br />
+          <br />
+          <span class="comment"># Initialize Git tracking</span><br />
+          <span class="prompt">$</span> <span class="command">git init</span
+          ><br />
+          <span class="output"
+            >Initialized empty Git repository in
+            /path/to/my-college-project/.git/</span
+          ><br />
+          <br />
+          <span class="comment"># Verify the .git folder was created:</span
+          ><br />
+          <span class="prompt">$</span> <span class="command">ls -la</span
+          ><br />
+          <span class="output">drwxr-xr-x 12 user staff .git</span>
+        </div>
+        <p>
+          Congratulations! Git is now tracking this folder. Every change will be
+          recorded.
+        </p>
+
+        <h3>Step 5: Make Your First Commit</h3>
+        <div class="terminal">
+          <div class="terminal-label">Terminal</div>
+          <span class="comment"># Create a README file</span><br />
+          <span class="prompt">$</span>
+          <span class="command">echo "# My College Project" > README.md</span
+          ><br />
+          <br />
+          <span class="comment"># Check what changed</span><br />
+          <span class="prompt">$</span> <span class="command">git status</span
+          ><br />
+          <span class="output">On branch main</span><br />
+          <span class="output">Untracked files:</span><br />
+          <span class="output"> README.md</span><br />
+          <br />
+          <span class="comment"># Stage it</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git add README.md</span><br />
+          <br />
+          <span class="comment"># Commit with a message</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git commit -m "Initial commit: add README"</span
+          ><br />
+          <span class="output"
+            >[main (root-commit) a1b2c3d] Initial commit: add README</span
+          ><br />
+          <span class="output"> 1 file changed, 1 insertion(+)</span><br />
+          <br />
+          <span class="comment"># View your commit history</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git log --oneline</span><br />
+          <span class="output">a1b2c3d Initial commit: add README</span>
+        </div>
+        <p>
+          <strong>You just made your first commit!</strong> It's saved forever
+          in the <code>.git</code> folder. If you make a mistake later, you can
+          always come back to this version.
+        </p>
+
+        <h3>Daily Workflow (What You'll Do Every Day)</h3>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Edit Files</h4>
+              <p>Open your text editor and write code. Git watches quietly.</p>
+              <p><code>git status</code> shows what changed</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Stage Changes</h4>
+              <p>Tell Git which files are ready to save.</p>
+              <p><code>git add .</code> (stages all changes)</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Commit</h4>
+              <p>Save a permanent snapshot with a clear message.</p>
+              <p><code>git commit -m "Added login validation"</code></p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Push to GitHub</h4>
+              <p>Upload your commits to GitHub (after we set it up).</p>
+              <p><code>git push</code></p>
+            </div>
+          </div>
+        </div>
+
+        <h3>Step 6: Create a Repository on GitHub</h3>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <p>Log into GitHub</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <p>
+                Click the <strong>+</strong> icon →
+                <strong>New repository</strong>
+              </p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <p>Enter name: <code>my-college-project</code></p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <p>Choose <strong>Public</strong> (so recruiters can see it)</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <p>Click <strong>Create repository</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <h3>Step 7: Connect Local to GitHub</h3>
+        <p>
+          GitHub will show you instructions. Follow them (they'll look like
+          this):
+        </p>
+
+        <div class="terminal">
+          <div class="terminal-label">Terminal</div>
+          <span class="comment"
+            ># Add GitHub as your "remote" (online backup)</span
+          ><br />
+          <span class="prompt">$</span>
+          <span class="command"
+            >git remote add origin
+            https://github.com/rahul-kumar/my-college-project.git</span
+          ><br />
+          <br />
+          <span class="comment"># Verify it connected:</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git remote -v</span><br />
+          <span class="output"
+            >origin https://github.com/rahul-kumar/my-college-project.git
+            (fetch)</span
+          ><br />
+          <span class="output"
+            >origin https://github.com/rahul-kumar/my-college-project.git
+            (push)</span
+          ><br />
+          <br />
+          <span class="comment"># Push your commits to GitHub</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git push -u origin main</span><br />
+          <span class="output">Enumerating objects: 3, done.</span><br />
+          <span class="output">Counting objects: 100% (3/3), done.</span><br />
+          <span class="output"
+            >Writing objects: 100% (3/3), 234 bytes | 234.00 B/s, done.</span
+          ><br />
+          <span class="output"
+            >To https://github.com/rahul-kumar/my-college-project.git</span
+          ><br />
+          <span class="output"> * [new branch] main -> main</span>
+        </div>
+
+        <p>
+          <strong>Done!</strong> Refresh your GitHub repository page. Your code
+          is now online!
+        </p>
+      </section>
+
+      <!-- ============ HOW GIT WORKS ============ -->
+      <section class="section" id="how">
+        <h2>HOW: How Git Actually Works Internally</h2>
+
+        <h3>The Three Stages (Most Important Concept)</h3>
+        <p>
+          Every file in Git exists in one of three states. Understanding these
+          is the key to everything.
+        </p>
+
+        <div class="diagram">
+          <div class="diagram-title">The Three Stages of Git:</div>
+          <pre>
+Working Directory          Staging Area          Repository (.git)
+  (Your laptop)         (Ready to save)       (Permanent history)
+       |                      |                      |
+  You edit files      You choose which       Git saves it
+  freely here         files to save         forever here
+       |                      |                      |
+   git add           git commit
+   Move ────────────→ ─────────────→</pre
+          >
+        </div>
+
+        <h3>Stage 1: Working Directory</h3>
+        <p>
+          This is simply your project folder on your laptop. When you create a
+          new file, edit existing code, or delete something — that happens here.
+          Git can see the changes but hasn't saved anything yet.
+        </p>
+
+        <div class="story-box">
+          <h4>Example: Rahul's Day</h4>
+          <p>
+            Rahul opens VS Code and creates <code>login.py</code>. He writes 50
+            lines of login code. This file is in the Working Directory. Git sees
+            it but hasn't saved it.
+          </p>
+          <p>Command to check: <code>git status</code></p>
+        </div>
+
+        <h3>Stage 2: Staging Area</h3>
+        <p>
+          The Staging Area (also called "Index") is a preparation zone. You
+          choose which changes to include in the next save. This gives you fine
+          control — maybe you changed 3 files but only want to save 2 of them
+          right now.
+        </p>
+
+        <div class="story-box">
+          <h4>Example: Ready to Save</h4>
+          <p>Rahul's <code>login.py</code> is complete. He stages it:</p>
+          <p><code>git add login.py</code></p>
+          <p>
+            Now it's in the Staging Area — ready to be saved, but not saved yet.
+          </p>
+        </div>
+
+        <p>
+          <strong>Think of it like preparing an envelope:</strong> You've
+          decided what goes inside (staged), but you haven't sealed and mailed
+          it yet (committed).
+        </p>
+
+        <h3>Stage 3: Repository (The Permanent History)</h3>
+        <p>
+          When you run <code>git commit</code>, Git permanently records a
+          snapshot of all staged files. This is stored in the
+          <code>.git</code> folder. From this point on, that version exists
+          forever.
+        </p>
+
+        <div class="story-box">
+          <h4>Example: Make It Permanent</h4>
+          <p>Rahul commits:</p>
+          <p><code>git commit -m "Add login page with validation"</code></p>
+          <p>
+            This snapshot is now saved forever in the repository. If Rahul
+            breaks the code later, he can always come back to this version.
+          </p>
+        </div>
+
+        <h3>Complete Example: One Full Cycle</h3>
+
+        <div class="terminal">
+          <div class="terminal-label">Terminal</div>
+          <span class="comment"
+            ># Rahul creates login.py (Working Directory)</span
+          ><br />
+          <span class="prompt">$</span>
+          <span class="command">cat > login.py << 'EOF'</span><br />
+          <span class="command">def login(username, password):</span><br />
+          <span class="command">
+            return check_credentials(username, password)</span
+          ><br />
+          <span class="command">EOF</span><br />
+          <br />
+          <span class="comment"># Check status</span><br />
+          <span class="prompt">$</span> <span class="command">git status</span
+          ><br />
+          <span class="output">On branch main</span><br />
+          <span class="output">Untracked files:</span><br />
+          <span class="output"> login.py</span><br />
+          <br />
+          <span class="comment"># Stage the file (Staging Area)</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git add login.py</span><br />
+          <br />
+          <span class="comment"># Check status again</span><br />
+          <span class="prompt">$</span> <span class="command">git status</span
+          ><br />
+          <span class="output">Changes to be committed:</span><br />
+          <span class="output"> new file: login.py</span><br />
+          <br />
+          <span class="comment"># Commit to repository (permanent save)</span
+          ><br />
+          <span class="prompt">$</span>
+          <span class="command">git commit -m "Add login functionality"</span
+          ><br />
+          <span class="output">[main a1b2c3d] Add login functionality</span
+          ><br />
+          <span class="output"> 1 file changed, 3 insertions(+)</span><br />
+          <br />
+          <span class="comment"># Check status one more time</span><br />
+          <span class="prompt">$</span> <span class="command">git status</span
+          ><br />
+          <span class="output">nothing to commit, working tree clean</span>
+        </div>
+
+        <h3>How Commits Are Stored</h3>
+        <p>
+          A commit is NOT just the changes — it's a complete snapshot of your
+          entire project at that moment. This is brilliant because:
+        </p>
+
+        <ul>
+          <li>
+            You can instantly jump to any commit and see the project exactly as
+            it was
+          </li>
+          <li>No need to reconstruct from a chain of changes</li>
+          <li>Every version is independently accessible</li>
+        </ul>
+
+        <div class="story-box">
+          <h4>Real Example: Complete Snapshots</h4>
+          <p>
+            Commit 1 (Day 1): Project has login.py (100 lines), database.py (50
+            lines)
+          </p>
+          <p>
+            Commit 2 (Day 3): Rahul edits login.py (120 lines). Priya adds
+            schema.py (30 lines). Commit 2 stores: login.py (120 lines) +
+            database.py (50 lines) + schema.py (30 lines) = complete snapshot
+          </p>
+          <p>
+            If you jump to Commit 1: Project has only login.py and database.py
+          </p>
+          <p>
+            If you jump to Commit 2: You get all three files with their latest
+            versions
+          </p>
+        </div>
+
+        <h3>Branches: Parallel Timelines</h3>
+        <p>
+          A branch is simply a pointer to a commit. Think of it as a parallel
+          universe where you can experiment without affecting the main timeline.
+        </p>
+
+        <div class="diagram">
+          <div class="diagram-title">Branching in Action:</div>
+          <pre>
+main branch (stable):
+  Commit A ─── Commit B ─── Commit C
+  (v1.0)       (v1.1)       (v1.2)
+
+Rahul creates feature-login branch:
+                            \
+feature-login:             Commit D ─── Commit E
+                           (add login)    (add validation)
+
+Priya creates feature-payment branch:
+                            \
+feature-payment:           Commit F ─── Commit G
+                           (add payment)  (add checkout)
+
+Each person works independently. Main stays stable!</pre
+          >
+        </div>
+
+        <h3>Merging: Bringing Work Together</h3>
+        <p>
+          When a feature is complete and tested, you merge it back into main.
+          Git intelligently combines the changes.
+        </p>
+
+        <div class="diagram">
+          <div class="diagram-title">Merging Complete:</div>
+          <pre>
+Before Merge:
+main:          Commit B ─── Commit C
+                         \
+feature-login:           D ─── E
+
+After: git merge feature-login
+main:          Commit B ─── Commit C ─── Commit M (merge)
+                         \                /
+feature-login:           D ─────────────E
+
+Both branches now point to the merged result!</pre
+          >
+        </div>
+
+        <h3>Local vs. Remote Repositories</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Local Repository</th>
+              <th>Remote Repository (GitHub)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Lives on your laptop (.git folder)</td>
+              <td>Lives on GitHub's servers</td>
+            </tr>
+            <tr>
+              <td>Works completely offline</td>
+              <td>Requires internet connection</td>
+            </tr>
+            <tr>
+              <td>You see all your commits</td>
+              <td>You see pushed commits</td>
+            </tr>
+            <tr>
+              <td>Private — only you see it</td>
+              <td>Can be public or private</td>
+            </tr>
+            <tr>
+              <td>If laptop crashes, code is gone</td>
+              <td>Safe backup in the cloud</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============ TEAM WORK ============ -->
+      <section class="section" id="team">
+        <h2>TEAM WORK: Branching, Merging & Collaboration</h2>
+
+        <h3>The Team Scenario: College Group Project</h3>
+        <p>
+          Rahul (Team Lead), Priya, Arjun, and Anaya are building a college
+          attendance tracking system. They have one GitHub repository, but each
+          person works independently:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Rahul:</strong> Building the frontend (student dashboard)
+          </li>
+          <li><strong>Priya:</strong> Building the backend (API endpoints)</li>
+          <li><strong>Arjun:</strong> Building the database (schemas)</li>
+          <li>
+            <strong>Anaya:</strong> Managing everything (testing, merging)
+          </li>
+        </ul>
+
+        <h3>Problem: Working on the Same Repository</h3>
+        <p>
+          If all four people push directly to the <code>main</code> branch,
+          chaos happens:
+        </p>
+
+        <ul>
+          <li>Priya pushes incomplete API code — frontend breaks</li>
+          <li>Arjun pushes wrong database schema — nothing works</li>
+          <li>Rahul pushes UI changes that conflict with Priya's endpoints</li>
+        </ul>
+
+        <h3>Solution: Branches</h3>
+        <p>
+          Each person creates their own branch. The <code>main</code> branch
+          stays stable. Everyone works independently.
+        </p>
+
+        <div class="diagram">
+          <div class="diagram-title">Team Branching Strategy:</div>
+          <pre>
+main branch (Anaya guards this):
+  Initial ─── (everyone's work merges here)
+
+Rahul's branches:
+  feature-dashboard
+  feature-profile-page
+
+Priya's branches:
+  feature-api-login
+  feature-api-attendance
+
+Arjun's branches:
+  feature-database-schema
+  feature-report-generation
+
+Everyone codes independently. Main stays stable!</pre
+          >
+        </div>
+
+        <h3>Real Workflow: Day 1</h3>
+
+        <div class="story-box">
+          <h4>Rahul's Work (Frontend Developer)</h4>
+          <pre>
+<span class="comment"># Rahul pulls latest code from main</span>
+$ git pull origin main
+
+<span class="comment"># Create his own feature branch</span>
+$ git checkout -b feature-dashboard
+
+<span class="comment"># Edit files in his text editor</span>
+$ echo "Student Dashboard" > dashboard.html
+
+<span class="comment"># Stage changes</span>
+$ git add dashboard.html
+
+<span class="comment"># Commit with clear message</span>
+$ git commit -m "Add student dashboard with profile section"
+
+<span class="comment"># Push HIS BRANCH to GitHub (not main!)</span>
+$ git push origin feature-dashboard
+
+Output:
+  * [new branch] feature-dashboard -> feature-dashboard</pre>
+        </div>
+
+        <div class="story-box">
+          <h4>Priya's Work (Backend Developer)</h4>
+          <pre>
+<span class="comment"># Priya does the same</span>
+$ git pull origin main
+$ git checkout -b feature-api-attendance
+
+<span class="comment"># Create API code</span>
+$ echo "API endpoints for attendance" > api.py
+
+$ git add api.py
+$ git commit -m "Add attendance tracking API endpoints"
+$ git push origin feature-api-attendance
+
+Output:
+  * [new branch] feature-api-attendance -> feature-api-attendance</pre>
+        </div>
+
+        <p>Now on GitHub, there are three branches:</p>
+        <ul>
+          <li><code>main</code> — still clean and stable</li>
+          <li><code>feature-dashboard</code> — Rahul's work</li>
+          <li><code>feature-api-attendance</code> — Priya's work</li>
+        </ul>
+
+        <p>They're not stepping on each other. No conflicts. No overwriting.</p>
+
+        <h3>Day 3: Merging Complete Features</h3>
+        <p>
+          Rahul's dashboard is complete and tested. Time to bring it into main.
+        </p>
+
+        <div class="terminal">
+          <div class="terminal-label">
+            Anaya (Team Lead) merges Rahul's work:
+          </div>
+          <span class="prompt">$</span>
+          <span class="command">git pull origin main</span><br />
+          <span class="prompt">$</span>
+          <span class="command"
+            >git merge origin/feature-dashboard -m "Merge dashboard
+            feature"</span
+          ><br />
+          <span class="output">Fast-forward</span><br />
+          <span class="output"> dashboard.html | 1 +</span><br />
+          <span class="output"> 1 file changed, 1 insertion(+)</span><br />
+          <br />
+          <span class="prompt">$</span>
+          <span class="command">git push origin main</span><br />
+          <span class="output"
+            >To https://github.com/rahul-kumar/attendance-system.git</span
+          ><br />
+          <span class="output"> * [new branch] main -> main</span>
+        </div>
+
+        <p>
+          Rahul's dashboard is now part of the main project!
+          <code>main</code> is one commit ahead.
+        </p>
+
+        <h3>Handling Merge Conflicts</h3>
+        <p>
+          Sometimes two people edit the same file. Git asks you to decide which
+          version to keep.
+        </p>
+
+        <div class="story-box">
+          <h4>Real Conflict Example</h4>
+          <p>
+            <strong>Scenario:</strong> Priya and Rahul both edited
+            <code>config.py</code> line 5:
+          </p>
+          <ul>
+            <li>
+              Priya changed it to:
+              <code>DATABASE_HOST = "production-server"</code>
+            </li>
+            <li>
+              Rahul changed it to: <code>DATABASE_HOST = "localhost"</code>
+            </li>
+          </ul>
+          <p>When Anaya tries to merge, Git shows both versions:</p>
+          <pre
+            style="
+              background: var(--code-bg);
+              color: var(--code-text);
+              padding: 16px;
+            "
+          >
+<<<<<<< HEAD
+DATABASE_HOST = "production-server"
+=======
+DATABASE_HOST = "localhost"
+>>>>>>> feature-dashboard</pre
+          >
+          <p>
+            Anaya opens the file, decides which is correct (probably "localhost"
+            for testing), removes the conflict markers, and commits:
+          </p>
+          <pre><code>git add config.py
+git commit -m "Resolve database host conflict"</code></pre>
+        </div>
+
+        <h3>Essential Team Commands</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>What It Does</th>
+              <th>Real Usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>git checkout -b feature-name</code></td>
+              <td>Create your own branch</td>
+              <td><code>git checkout -b feature-api-login</code></td>
+            </tr>
+            <tr>
+              <td><code>git push origin branch-name</code></td>
+              <td>Push your branch to GitHub</td>
+              <td><code>git push origin feature-api-login</code></td>
+            </tr>
+            <tr>
+              <td><code>git pull origin main</code></td>
+              <td>Get latest updates from main</td>
+              <td>Always do this before starting work</td>
+            </tr>
+            <tr>
+              <td><code>git merge branch-name</code></td>
+              <td>Combine a branch into current one</td>
+              <td><code>git merge feature-api-login</code></td>
+            </tr>
+            <tr>
+              <td><code>git branch -d branch-name</code></td>
+              <td>Delete a branch after merging</td>
+              <td><code>git branch -d feature-api-login</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Golden Rules for Team Work</h3>
+
+        <div class="success-box">
+          <h4>✓ Rule 1: Never Push Directly to Main</h4>
+          <p>
+            Always create a feature branch. Push to your branch first. Let the
+            team review before merging to main.
+          </p>
+        </div>
+
+        <div class="success-box">
+          <h4>✓ Rule 2: Pull Before You Start</h4>
+          <p>
+            Always run <code>git pull origin main</code> before you start
+            coding. This keeps you in sync with teammates.
+          </p>
+        </div>
+
+        <div class="success-box">
+          <h4>✓ Rule 3: Commit Frequently</h4>
+          <p>
+            Commit every 30-60 minutes. Finished a function? Commit. Fixed a
+            bug? Commit. More commits = finer history = easier debugging.
+          </p>
+        </div>
+
+        <div class="success-box">
+          <h4>✓ Rule 4: Write Clear Commit Messages</h4>
+          <p>
+            Bad: "Fixed stuff"<br />
+            Good: "Fix null pointer exception in attendance calculation when
+            hours are zero"
+          </p>
+        </div>
+      </section>
+
+      <!-- ============ ADVANCED ============ -->
+      <section class="section" id="advanced">
+        <h2>ADVANCED: Beyond the Basics</h2>
+
+        <h3>Stashing: Pause Your Work</h3>
+        <p>
+          <strong>Scenario:</strong> Rahul is working on dashboard improvements
+          when Anaya says "Critical bug — drop everything!"
+        </p>
+        <p>Rahul's dashboard code isn't ready to commit. What does he do?</p>
+
+        <div class="terminal">
+          <div class="terminal-label">Rahul stashes his work:</div>
+          <span class="prompt">$</span> <span class="command">git stash</span
+          ><br />
+          <span class="output">Saved working directory and index state</span
+          ><br />
+          <br />
+          <span class="comment"># His changes are safely saved but hidden</span
+          ><br />
+          <span class="prompt">$</span> <span class="command">git status</span
+          ><br />
+          <span class="output">nothing to commit, working tree clean</span
+          ><br />
+          <br />
+          <span class="comment"># Switch to main, fix bug</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git checkout main</span><br />
+          <span class="prompt">$</span>
+          <span class="command"
+            >git commit -m "Critical fix: database connection issue"</span
+          ><br />
+          <span class="prompt">$</span>
+          <span class="command">git push origin main</span><br />
+          <br />
+          <span class="comment"># Back to work</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git checkout feature-dashboard</span><br />
+          <span class="prompt">$</span>
+          <span class="command">git stash pop</span><br />
+          <span class="output">Dropped stash@{0}</span><br />
+          <br />
+          <span class="comment"
+            ># Rahul's work is back, exactly as he left it</span
+          >
+        </div>
+
+        <h3>Viewing History: Understanding What Happened</h3>
+
+        <div class="terminal">
+          <div class="terminal-label">View commit history:</div>
+          <span class="prompt">$</span>
+          <span class="command">git log --oneline --graph --all</span><br />
+          <span class="output"
+            >* a1b2c3d (HEAD -> main) Fix database connection</span
+          ><br />
+          <span class="output">* 9e8f7g6 Add dashboard feature</span><br />
+          <span class="output">* 5h4i3j2 Add API endpoints</span><br />
+          <span class="output">* 1k2l3m4 Initial commit</span><br />
+          <br />
+          <span class="comment"
+            ># See detailed changes in a specific commit:</span
+          ><br />
+          <span class="prompt">$</span>
+          <span class="command">git show 9e8f7g6</span><br />
+          <span class="comment"
+            ># Shows author, date, message, and all lines that changed</span
+          >
+        </div>
+
+        <h3>Undoing Mistakes: Three Levels</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Mistake</th>
+              <th>Command</th>
+              <th>Effect</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Haven't staged yet</td>
+              <td><code>git restore filename</code></td>
+              <td>Discard changes in file</td>
+            </tr>
+            <tr>
+              <td>Staged but not committed</td>
+              <td><code>git restore --staged filename</code></td>
+              <td>Unstage the file</td>
+            </tr>
+            <tr>
+              <td>Already committed (local only)</td>
+              <td><code>git reset HEAD~1</code></td>
+              <td>Undo the commit, keep changes</td>
+            </tr>
+            <tr>
+              <td>Already pushed to GitHub</td>
+              <td><code>git revert commit-id</code></td>
+              <td>Create a new commit that undoes it</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>SSH vs HTTPS: Which Should You Use?</h3>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4>HTTPS</h4>
+            <p><strong>Pros:</strong> No setup, works everywhere</p>
+            <p><strong>Cons:</strong> GitHub asks for password every time</p>
+            <p>
+              <strong>Best for:</strong> One-time use or unfamiliar computers
+            </p>
+          </div>
+          <div class="comparison-card">
+            <h4>SSH</h4>
+            <p><strong>Pros:</strong> Set up once, never type password again</p>
+            <p><strong>Cons:</strong> Takes 5 minutes to set up</p>
+            <p><strong>Best for:</strong> Your own laptop (daily work)</p>
+          </div>
+        </div>
+
+        <p>
+          <strong>Recommendation:</strong> Use SSH for your laptop. You'll feel
+          like a professional developer when Git never asks for passwords again!
+        </p>
+
+        <h3>Real-Time Use Cases</h3>
+
+        <div class="story-box">
+          <h4>Case 1: Bug in Production</h4>
+          <p>
+            A user reports a bug. You run <code>git log --grep="bug"</code> to
+            find when it happened. You use <code>git bisect</code> to pinpoint
+            the exact commit that introduced it. Then you write a fix, test it,
+            and deploy.
+          </p>
+        </div>
+
+        <div class="story-box">
+          <h4>Case 2: Code Review</h4>
+          <p>
+            Priya opens a Pull Request for her new API. Anaya reviews the
+            changes on GitHub, leaves comments. Priya makes improvements and
+            pushes more commits to the same PR. Anaya sees the updates,
+            approves, and merges.
+          </p>
+        </div>
+
+        <div class="story-box">
+          <h4>Case 3: Emergency Hotfix</h4>
+          <p>
+            Payment system is broken! Anaya creates a hotfix branch from main,
+            fixes the bug, tests it, and pushes. While this is happening, Rahul
+            is still working on his dashboard feature on a separate branch. No
+            interference.
+          </p>
+        </div>
+      </section>
+
+      <!-- ============ CHEAT SHEET ============ -->
+      <section class="section">
+        <h2>Command Cheat Sheet</h2>
+
+        <h3>Setup (One-Time)</h3>
+        <pre>
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git config --list  # verify</pre
+        >
+
+        <h3>Basic Workflow (Daily)</h3>
+        <pre>
+git status              # See what changed
+git add filename        # Stage specific file
+git add .               # Stage all changes
+git commit -m "msg"     # Save a snapshot
+git log --oneline       # View history
+git push                # Upload to GitHub
+git pull                # Download from GitHub</pre
+        >
+
+        <h3>Branching (Team Work)</h3>
+        <pre>
+git branch                        # List branches
+git checkout -b feature-name      # Create & switch
+git checkout feature-name         # Switch
+git merge feature-name            # Combine branches
+git branch -d feature-name        # Delete branch</pre
+        >
+
+        <h3>Fixing Mistakes</h3>
+        <pre>
+git restore filename              # Discard changes
+git restore --staged filename     # Unstage
+git reset HEAD~1                  # Undo last commit
+git revert commit-id              # Undo safely (pushed code)
+git stash                         # Save & hide work
+git stash pop                     # Bring back</pre
+        >
+
+        <h3>GitHub Connection</h3>
+        <pre>
+git clone url                     # Download repository
+git remote add origin url         # Connect local to GitHub
+git push -u origin main           # First push
+git push                          # Later pushes
+git pull origin main              # Get latest</pre
+        >
+      </section>
+
+      <!-- ============ COMPARISON: ALTERNATIVES ============ -->
+      <section class="section">
+        <h2>Alternatives: Other Version Control Systems</h2>
+
+        <p>
+          Git is the industry standard, but alternatives exist. Here's honest
+          comparison:
+        </p>
+
+        <h3>Mercurial (Hg)</h3>
+        <p>
+          <strong>How it differs:</strong> Similar to Git but simpler syntax.
+          Less distributed.
+        </p>
+        <p><strong>Used by:</strong> Some companies, but much less common.</p>
+        <p><strong>Verdict:</strong> Not worth learning. Git dominates.</p>
+
+        <h3>Subversion (SVN)</h3>
+        <p>
+          <strong>How it differs:</strong> Much older. Centralized model —
+          history only on server.
+        </p>
+        <p><strong>Used by:</strong> Legacy systems, older enterprises.</p>
+        <p>
+          <strong>Verdict:</strong> Dying out. You might encounter it, but Git
+          is the future.
+        </p>
+
+        <h3>GitHub Alternatives: GitLab, Gitea, Bitbucket</h3>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4>GitLab</h4>
+            <p>More features than GitHub, generous free tier, self-hostable</p>
+            <p>Good for: Teams wanting more control</p>
+          </div>
+          <div class="comparison-card">
+            <h4>Gitea</h4>
+            <p>Lightweight, self-hosted only, minimal resource</p>
+            <p>Good for: Private company servers</p>
+          </div>
+          <div class="comparison-card">
+            <h4>Bitbucket</h4>
+            <p>Integrates with Jira, free for small teams</p>
+            <p>Good for: Atlassian ecosystem users</p>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h4>💡 The Reality</h4>
+          <p>
+            Every company uses Git. Most use GitHub. Learning GitHub makes you
+            instantly employable. If you need to use GitLab or Bitbucket later,
+            you'll transfer your Git knowledge in minutes.
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <h3>You're Ready to Code Like a Professional</h3>
+      <p>
+        Git and GitHub are not optional — they're industry standard. Every
+        developer uses them every day.
+      </p>
+      <p>
+        The best way to learn is by doing. Create your first repository today.
+        Make mistakes. Fix them. That's how you master Git.
+      </p>
+      <p style="margin-top: 32px; font-size: 13px; opacity: 0.8">
+        Built for college students • 2024 • Free and open knowledge
+      </p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git & GitHub Fundamentals — 30-Hour Course</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root{
+  --cream:#FAF6EE;
+  --paper:#FFFFFF;
+  --ink:#1C1B22;
+  --ink-soft:#5B5A66;
+  --rule:#E7E1D3;
+  --term-bg:#1B1A22;
+  --term-text:#E7E4F4;
+  --term-prompt:#7C7A8C;
+  --term-accent:#6CE0A4;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{ font-family:'Space Grotesk',sans-serif; margin:0; }
+code, .mono{ font-family:'JetBrains Mono',monospace; }
+svg.icon{ width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+
+a{ color:inherit; }
+
+/* ---------- shell ---------- */
+.shell{ max-width:880px; margin:0 auto; padding:0 24px 80px; }
+
+/* ---------- sticky nav ---------- */
+.nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(250,246,238,0.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--rule);
+}
+.nav__inner{
+  max-width:880px; margin:0 auto; padding:12px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.nav__brand{ font-weight:700; font-size:14px; letter-spacing:0.02em; display:flex; align-items:center; gap:8px; }
+.nav__brand .dot{ width:8px;height:8px;border-radius:50%; background:#6CE0A4; }
+.nav__units{ display:flex; gap:14px; }
+.nav__units a{
+  text-decoration:none; font-size:12px; font-weight:600; color:var(--ink-soft);
+  display:flex; align-items:center; gap:6px; white-space:nowrap;
+}
+.nav__units .chip{ width:9px; height:9px; border-radius:50%; }
+
+/* ---------- hero ---------- */
+.hero{ padding:56px 0 28px; }
+.hero__kicker{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+  color:#6741D9; background:#EFEAFB; padding:6px 12px; border-radius:20px; margin-bottom:18px;
+}
+.hero h1{ font-size:40px; line-height:1.12; letter-spacing:-0.01em; margin-bottom:10px;}
+.hero h1 span{ color:#0E9F8B; }
+.hero p.lead{ font-size:17px; color:var(--ink-soft); max-width:600px; margin-bottom:28px; }
+
+.terminal{
+  background:var(--term-bg); border-radius:14px; overflow:hidden;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,0.45);
+}
+.terminal__bar{
+  display:flex; align-items:center; gap:8px; padding:10px 14px;
+  background:#26242F; border-bottom:1px solid #34323F;
+}
+.terminal__bar span{ width:10px; height:10px; border-radius:50%; display:block; }
+.terminal__bar .r{ background:#F2625A; } .terminal__bar .y{ background:#F4BF50; } .terminal__bar .g{ background:#62C554; }
+.terminal__bar .label{ margin-left:8px; font-size:12px; color:#8B889A; font-family:'JetBrains Mono',monospace; }
+.terminal__body{ padding:20px 22px; font-family:'JetBrains Mono',monospace; font-size:13.5px; color:var(--term-text); }
+.terminal__body .line{ margin-bottom:6px; }
+.terminal__body .prompt{ color:var(--term-prompt); margin-right:8px; }
+.terminal__body .out{ color:var(--term-accent); }
+.terminal__body .cmt{ color:#7A788A; }
+
+/* ---------- meta panel ---------- */
+.meta{
+  margin-top:26px; background:var(--paper); border:1px solid var(--rule); border-radius:14px;
+  display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden;
+}
+.meta__item{ padding:16px 18px; border-right:1px solid var(--rule); }
+.meta__item:last-child{ border-right:none; }
+.meta__label{ font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px; }
+.meta__value{ font-size:14px; font-weight:600; }
+
+/* ---------- intro note ---------- */
+.intro{
+  margin:36px 0 8px; padding:22px 24px; border-radius:14px;
+  background:#FFF7E8; border:1px solid #F3E3BE;
+  font-size:15px; color:#5A4A26;
+}
+.intro b{ color:#1C1B22; }
+
+/* ---------- unit section ---------- */
+.unit{ margin-top:64px; }
+.unit__header{
+  border-radius:16px; padding:26px 28px; color:#fff;
+  background:var(--accent);
+  display:flex; align-items:flex-start; gap:18px; margin-bottom:28px;
+  box-shadow:0 16px 30px -18px var(--deep);
+}
+.unit__num{
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:34px;
+  background:rgba(255,255,255,0.18); border-radius:10px; padding:6px 14px; line-height:1;
+}
+.unit__title{ font-size:21px; margin-bottom:6px; }
+.unit__desc{ font-size:14.5px; opacity:0.92; max-width:520px; }
+.unit__hours{
+  margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;
+  background:rgba(255,255,255,0.18); padding:6px 12px; border-radius:20px; white-space:nowrap;
+}
+
+/* ---------- track / lesson cards ---------- */
+.track{ display:flex; flex-direction:column; }
+.lesson{ display:grid; grid-template-columns:34px 1fr; column-gap:14px; }
+.lesson__rail{ display:flex; flex-direction:column; align-items:center; }
+.lesson__rail .seg{ width:3px; flex:1; background:var(--accent); opacity:0.35; }
+.lesson__rail .seg.hide{ background:transparent; }
+.lesson__dot{
+  width:16px; height:16px; border-radius:50%; background:var(--accent);
+  border:3px solid var(--cream); box-shadow:0 0 0 2px var(--accent); flex-shrink:0;
+}
+.lesson__card{
+  background:var(--paper); border:1px solid var(--rule); border-radius:14px;
+  padding:20px 22px; margin-bottom:22px; box-shadow:0 8px 18px -14px rgba(0,0,0,0.25);
+}
+.lesson__hour{
+  display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+  letter-spacing:0.05em; color:var(--accent); background:var(--tint); padding:4px 10px;
+  border-radius:20px; margin-bottom:10px;
+}
+.lesson__title{ font-size:17.5px; margin-bottom:8px; }
+.lesson__text{ font-size:14.5px; color:#3A3940; margin-bottom:0; }
+.lesson__text + .lesson__text{ margin-top:8px; }
+
+.callout{
+  margin-top:14px; padding:14px 16px; border-radius:10px; font-size:13.8px;
+  display:flex; gap:10px; align-items:flex-start; background:var(--tint); border:1px solid transparent;
+}
+.callout svg{ color:var(--accent); margin-top:2px; }
+.callout b.tag{
+  display:block; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:3px;
+}
+.callout--why{ background:#F3F2FA; }
+.callout--why svg{ color:#6741D9; }
+.callout--why b.tag{ color:#6741D9; }
+
+.codebox{ margin-top:14px; border-radius:10px; overflow:hidden; background:var(--term-bg); }
+.codebox__bar{
+  display:flex; align-items:center; gap:7px; padding:8px 12px; background:#26242F;
+}
+.codebox__bar svg{ color:#8B889A; width:14px; height:14px; }
+.codebox__bar span{ font-size:11px; color:#8B889A; font-family:'JetBrains Mono',monospace; }
+.codebox pre{
+  margin:0; padding:14px 16px; font-family:'JetBrains Mono',monospace; font-size:13px;
+  color:#E7E4F4; overflow-x:auto; line-height:1.7;
+}
+.codebox pre .p{ color:#7C7A8C; }
+.codebox pre .c{ color:#7A788A; }
+
+/* ---------- unit accent variables ---------- */
+.unit--1{ --accent:#4C5FD7; --deep:#2F3DA0; --tint:#ECEEFB; }
+.unit--2{ --accent:#0E9F8B; --deep:#0A7868; --tint:#E6F7F3; }
+.unit--3{ --accent:#E08A1F; --deep:#B06A12; --tint:#FCEFDD; }
+.unit--4{ --accent:#D6336C; --deep:#A4214F; --tint:#FBE6EE; }
+.unit--5{ --accent:#6741D9; --deep:#4B2BA8; --tint:#EFEAFB; }
+
+/* ---------- cheat sheet ---------- */
+.cheat{
+  margin-top:64px; background:var(--paper); border:1px solid var(--rule); border-radius:16px; padding:30px 28px;
+}
+.cheat h2{ font-size:22px; margin-bottom:6px; }
+.cheat p.sub{ color:var(--ink-soft); font-size:14px; margin-bottom:22px; }
+.cheat__grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px 22px; }
+.cheat__row{ display:flex; align-items:baseline; gap:10px; font-size:13.8px; }
+.cheat__row code{
+  background:#F2EFE6; padding:3px 8px; border-radius:6px; font-size:12.8px; font-weight:600; white-space:nowrap;
+}
+.cheat__row span{ color:var(--ink-soft); }
+
+/* ---------- closing ---------- */
+.closing{
+  margin-top:48px; border-radius:16px; padding:34px 30px; color:#fff;
+  background:linear-gradient(120deg,#1B1A22,#2F2C3E);
+  text-align:center;
+}
+.closing h3{ font-size:21px; margin-bottom:10px; }
+.closing p{ color:#C9C6D6; font-size:14.5px; max-width:540px; margin:0 auto; }
+.closing .badge{
+  display:inline-flex; gap:8px; margin-top:18px; font-family:'JetBrains Mono',monospace; font-size:12px;
+  color:#6CE0A4; background:rgba(108,224,164,0.1); padding:7px 14px; border-radius:20px;
+}
+
+@media (max-width:680px){
+  .hero h1{ font-size:30px; }
+  .meta{ grid-template-columns:repeat(2,1fr); }
+  .meta__item:nth-child(2){ border-right:none; }
+  .nav__units{ display:none; }
+  .unit__header{ flex-wrap:wrap; }
+  .unit__hours{ margin-left:0; }
+  .cheat__grid{ grid-template-columns:1fr; }
+}
+
+@media print{
+  .nav{ position:static; }
+  .lesson__card, .meta, .cheat{ box-shadow:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- icon sprite -->
+<svg style="display:none">
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><polyline points="7 9 10 12 7 15"></polyline><line x1="12" y1="15" x2="17" y2="15"></line></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M12 3a6 6 0 0 0-4 10.5c.5.5.8 1 .9 1.5h6.2c.1-.5.4-1 .9-1.5A6 6 0 0 0 12 3z"></path></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1"></circle></symbol>
+  <symbol id="i-branch" viewBox="0 0 24 24"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></symbol>
+</svg>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <div class="nav__brand"><span class="dot"></span> Git &amp; GitHub Fundamentals</div>
+    <div class="nav__units">
+      <a href="#unit-1"><span class="chip" style="background:#4C5FD7"></span>Unit 1</a>
+      <a href="#unit-2"><span class="chip" style="background:#0E9F8B"></span>Unit 2</a>
+      <a href="#unit-3"><span class="chip" style="background:#E08A1F"></span>Unit 3</a>
+      <a href="#unit-4"><span class="chip" style="background:#D6336C"></span>Unit 4</a>
+      <a href="#unit-5"><span class="chip" style="background:#6741D9"></span>Unit 5</a>
+      <a href="#cheat-sheet">Cheat Sheet</a>
+    </div>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <section class="hero">
+    <div class="hero__kicker">Certificate Course • 2 Credits • 30 Hours</div>
+    <h1>Git &amp; GitHub <span>Fundamentals</span></h1>
+    <p class="lead">A beginner-friendly, hour-by-hour guide built for BCA and college students — plain language, real-life examples, and commands you actually run, no prior coding experience needed.</p>
+
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="r"></span><span class="y"></span><span class="g"></span>
+        <span class="label">bash</span>
+      </div>
+      <div class="terminal__body">
+        <div class="line"><span class="prompt">$</span>git init my-bca-project</div>
+        <div class="line out">Initialized empty Git repository</div>
+        <div class="line"><span class="prompt">$</span>echo "30 hours of Git, taught simply" &gt; README.md</div>
+        <div class="line"><span class="prompt">$</span>git add . &amp;&amp; git commit -m "Day 1: started learning Git"</div>
+        <div class="line cmt"># by the end of this course, this will be second nature</div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div class="meta__item"><div class="meta__label">Institute</div><div class="meta__value">Shri Shambhubhai V. Patel College of C.S. &amp; B.M.</div></div>
+      <div class="meta__item"><div class="meta__label">Faculty</div><div class="meta__value">Asst. Prof. Bipin B. Jadav</div></div>
+      <div class="meta__item"><div class="meta__label">Course In-charge</div><div class="meta__value">Asst. Prof. Chintu H. Thakkar</div></div>
+      <div class="meta__item"><div class="meta__label">Hours / Credits</div><div class="meta__value">30 Hrs · 2 Credits</div></div>
+    </div>
+  </section>
+
+  <div class="intro">
+    <b>How to use this guide:</b> each unit is broken into 6 one-hour lessons. Every lesson has a simple explanation, a real-world example you'll recognise from college life, and (where relevant) the exact command to type. Open a terminal alongside this guide and try every command as you read — Git is learned by doing, not by reading.
+  </div>
+
+  <!-- ===================== UNIT 1 ===================== -->
+  <section class="unit unit--1" id="unit-1">
+    <div class="unit__header">
+      <div class="unit__num">01</div>
+      <div>
+        <div class="unit__title">Introduction to Version Control</div>
+        <div class="unit__desc">What version control is, why every developer uses it, and getting Git &amp; GitHub installed and ready.</div>
+      </div>
+      <div class="unit__hours">HOURS 1–6</div>
+    </div>
+
+    <div class="track">
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg hide"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 01</span>
+          <h3 class="lesson__title">What is Version Control, and Why Do You Need It?</h3>
+          <p class="lesson__text">Version control is a system that automatically tracks every change made to a file, so you can see what changed, who changed it, and go back to any earlier version — without ever renaming a file.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>You've all done this: <code>Assignment_final.docx</code>, <code>Assignment_final2.docx</code>, <code>Assignment_FINAL_use_this_one.docx</code>. Version control replaces that mess — one file, full history, zero confusion.</div>
+          </div>
+          <div class="callout callout--why">
+            <svg class="icon"><use href="#i-target"></use></svg>
+            <div><b class="tag">Why it matters for you</b>Almost every coding interview today assumes you know Git. It's treated as a basic skill, like typing.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 02</span>
+          <h3 class="lesson__title">Local, Centralized &amp; Distributed Version Control Systems</h3>
+          <p class="lesson__text"><b>Local VCS</b> keeps history only on your own machine — like a personal diary. <b>Centralized VCS</b> stores all history on one shared server everyone connects to — like one library book the whole class shares. <b>Distributed VCS</b> (what Git is) gives every person a full copy of the entire project history on their own laptop — like everyone having their own complete photocopy of that book.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>If a centralized server crashes, nobody can work. With Git, even if GitHub goes down for a day, you still have the entire project history sitting safely on your own computer.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 03</span>
+          <h3 class="lesson__title">Why Git and GitHub? The Real Benefits</h3>
+          <p class="lesson__text">Git is the tool that runs on your computer and tracks history, even fully offline. GitHub is a website that stores your Git projects online so you can back them up, collaborate with others, and showcase your work publicly.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>During placement interviews, recruiters frequently ask for your GitHub profile link — it works like an online resume made entirely of real, working code.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 04</span>
+          <h3 class="lesson__title">Installing Git on Windows &amp; the <code>config</code> Command</h3>
+          <p class="lesson__text">Installing Git is just like installing any other software — download it from git-scm.com and click through the setup. The first thing you do afterward is tell Git who you are, using <code>git config</code>, so every change you make is "signed" with your name.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git config --global user.name "Your Name"
+<span class="p">$</span> git config --global user.email "you@example.com"</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>It's exactly like writing your name on the first page of a college notebook — it records who made every entry that follows.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 05</span>
+          <h3 class="lesson__title">Getting Help Through the <code>help</code> Command</h3>
+          <p class="lesson__text">Git has a built-in manual for every single command, so you never have to leave the terminal to remember how something works.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git help
+<span class="p">$</span> git help commit
+<span class="p">$</span> git commit --help</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Like having a reference manual sitting open next to you during a practical exam — always available, no internet required.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg hide"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 06</span>
+          <h3 class="lesson__title">Creating a GitHub Account &amp; First Look Around</h3>
+          <p class="lesson__text">Sign up at github.com, choose a profile picture, and explore the dashboard — your repositories, notifications, and profile page.</p>
+          <div class="callout callout--why">
+            <svg class="icon"><use href="#i-target"></use></svg>
+            <div><b class="tag">Why it matters for you</b>Pick your username carefully — something like <code>firstname-lastname</code> rather than a gamer-tag. This becomes part of your professional identity that recruiters will see.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== UNIT 2 ===================== -->
+  <section class="unit unit--2" id="unit-2">
+    <div class="unit__header">
+      <div class="unit__num">02</div>
+      <div>
+        <div class="unit__title">Getting Started with Git</div>
+        <div class="unit__desc">Repositories, the staging area, your first commit, and syncing with GitHub.</div>
+      </div>
+      <div class="unit__hours">HOURS 7–12</div>
+    </div>
+
+    <div class="track">
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg hide"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 07</span>
+          <h3 class="lesson__title">Local vs. Remote Repositories</h3>
+          <p class="lesson__text">A "repository" (repo) is simply a project folder that Git is tracking. The <b>local</b> repo lives on your own computer; the <b>remote</b> repo is the copy stored on GitHub's servers online.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>The local repo is your rough notebook at home; the remote repo is the final, neat copy submitted to the college office that everyone else can access too.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 08</span>
+          <h3 class="lesson__title"><code>git init</code> — Starting Your First Repository</h3>
+          <p class="lesson__text">Running <code>git init</code> inside any folder turns it into a Git-tracked project by creating a hidden <code>.git</code> folder that quietly stores all the history.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> mkdir my-college-project
+<span class="p">$</span> cd my-college-project
+<span class="p">$</span> git init</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Like opening a fresh lab logbook the moment you start an assignment, so every step gets recorded from day one.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 09</span>
+          <h3 class="lesson__title"><code>git status</code> &amp; <code>git add</code> — The Staging Area</h3>
+          <p class="lesson__text"><code>git status</code> shows which files changed. <code>git add</code> moves those changes into a "staging area" — a waiting room before anything is permanently saved.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git status
+<span class="p">$</span> git add app.py
+<span class="p">$</span> git add .   <span class="c">// stage everything that changed</span></pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Think of online shopping — <code>git add</code> is adding items to your cart. You haven't checked out yet, you're just selecting what to save.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 10</span>
+          <h3 class="lesson__title"><code>git commit</code> — Saving a Permanent Snapshot</h3>
+          <p class="lesson__text"><code>git commit</code> takes everything in the staging area and saves it as a permanent, labelled checkpoint in your project's history, along with a message describing what changed.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git commit -m "Added login page"</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>It's a save-point in a video game — you can always return to that exact moment later. A clear message like "Fixed divide-by-zero bug in calculator app" helps your future self and teammates instantly.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 11</span>
+          <h3 class="lesson__title"><code>git clone</code> &amp; <code>git remote</code></h3>
+          <p class="lesson__text"><code>git clone</code> downloads a full copy of an existing GitHub repository onto your computer. <code>git remote</code> is how your local repo stays connected to that GitHub address.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git clone https://github.com/username/project.git</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>When a professor shares a starter-code repository link for a lab, "cloning" it gives you your own working copy on your laptop in one command.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg hide"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 12</span>
+          <h3 class="lesson__title"><code>push</code>, <code>pull</code>, <code>fetch</code> &amp; Your First Repository</h3>
+          <p class="lesson__text"><code>git push</code> uploads your local commits to GitHub. <code>git pull</code> downloads new commits and merges them in automatically. <code>git fetch</code> downloads new commits but lets you review them first, before merging.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git push origin main
+<span class="p">$</span> git pull origin main
+<span class="p">$</span> git fetch origin</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Submitting an assignment via GitHub Classroom is literally <code>git push</code>. Checking if a teammate added new code is <code>git pull</code>. Today's hands-on: create your first GitHub repository, connect it, and push your first commit end-to-end.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== UNIT 3 ===================== -->
+  <section class="unit unit--3" id="unit-3">
+    <div class="unit__header">
+      <div class="unit__num">03</div>
+      <div>
+        <div class="unit__title">Branching and Merging</div>
+        <div class="unit__desc">Working safely in parallel, combining work back together, and resolving conflicts.</div>
+      </div>
+      <div class="unit__hours">HOURS 13–18</div>
+    </div>
+
+    <div class="track">
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg hide"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 13</span>
+          <h3 class="lesson__title">What is a Branch, and Why Do We Need One?</h3>
+          <p class="lesson__text">A branch is an independent, parallel copy of your project where you can experiment freely, without touching the main, working version at all.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Like writing a rough draft of an essay on a separate page while keeping your final neat copy untouched — if the draft doesn't work out, you simply discard that page. A team building a college management app keeps a stable <code>main</code> branch for demos, while one student tries a risky new attendance feature on its own branch.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 14</span>
+          <h3 class="lesson__title">Creating and Switching Branches</h3>
+          <p class="lesson__text"><code>git branch</code> creates a new branch, and <code>git switch</code> (or the older <code>git checkout</code>) moves you into it.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git branch feature-login
+<span class="p">$</span> git switch feature-login
+<span class="c">// or, shortcut for both steps:</span>
+<span class="p">$</span> git switch -c feature-login</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Naming branches clearly — like <code>feature-login</code> or <code>bugfix-navbar</code> — instantly tells teammates what you're working on, no explanation needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 15</span>
+          <h3 class="lesson__title">Working on a Feature Branch</h3>
+          <p class="lesson__text">Once you're on your new branch, you code, add, and commit exactly as before — but the <code>main</code> branch stays completely safe and unaffected the entire time.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Four students on one final-year project each take their own branch — <code>search-feature</code>, <code>profile-page</code>, <code>payment-module</code>, <code>admin-panel</code> — and work in parallel without stepping on each other's code.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 16</span>
+          <h3 class="lesson__title"><code>git merge</code> — Combining Branches Back Together</h3>
+          <p class="lesson__text">Once a feature is tested and working, <code>git merge</code> brings it back into the main branch.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git switch main
+<span class="p">$</span> git merge feature-login</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Once the new login feature is confirmed working on its own branch, merging it brings it into the version the whole team actually uses.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 17</span>
+          <h3 class="lesson__title">Merge Conflicts — and How to Resolve Them</h3>
+          <p class="lesson__text">A conflict happens when two branches changed the <i>same line</i> of the <i>same file</i> differently, and Git can't decide which version to keep — so it asks you.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>You and a teammate both edited line 10 of <code>index.html</code> differently. Git marks both versions with <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> markers; you open the file, decide what the final line should actually be, then commit the resolved version.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg hide"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 18</span>
+          <h3 class="lesson__title">Deleting Branches — Cleaning Up</h3>
+          <p class="lesson__text">Once a branch has been merged and is no longer needed, delete it to keep the project tidy.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git branch -d feature-login</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Just like deleting a rough-draft file once your assignment is finalised and submitted — there's no reason to keep the clutter around.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== UNIT 4 ===================== -->
+  <section class="unit unit--4" id="unit-4">
+    <div class="unit__header">
+      <div class="unit__num">04</div>
+      <div>
+        <div class="unit__title">Advanced Git Commands</div>
+        <div class="unit__desc">Reading history, comparing changes, and undoing mistakes the right way.</div>
+      </div>
+      <div class="unit__hours">HOURS 19–24</div>
+    </div>
+
+    <div class="track">
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg hide"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 19</span>
+          <h3 class="lesson__title"><code>git log</code> — Viewing Your Project's History</h3>
+          <p class="lesson__text"><code>git log</code> lists every commit ever made — author, date, and message — your project's complete diary.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git log
+<span class="p">$</span> git log --oneline --graph</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Before a viva on your own project, scrolling through <code>git log</code> reminds you exactly what you built and when — a built-in memory aid.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 20</span>
+          <h3 class="lesson__title"><code>git diff</code> — Comparing Changes Line by Line</h3>
+          <p class="lesson__text"><code>git diff</code> shows exactly which lines were added or removed between two versions — additions and removals highlighted clearly.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git diff</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Before committing, run <code>git diff</code> to double-check you didn't accidentally leave a stray <code>print("testing")</code> or commented-out code in your assignment.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 21</span>
+          <h3 class="lesson__title"><code>git stash</code> — Saving Unfinished Work Temporarily</h3>
+          <p class="lesson__text"><code>git stash</code> tucks away your uncommitted, half-finished changes safely, giving you a clean slate — without forcing you to commit unfinished work.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git stash
+<span class="p">$</span> git stash pop   <span class="c">// bring it back later</span></pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Like sweeping unfinished homework into a drawer when a guest suddenly arrives, then taking it back out exactly as you left it. If your professor needs an urgent fix on <code>main</code> while you're mid-feature, stash your work, fix the bug, then resume.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 22</span>
+          <h3 class="lesson__title"><code>git reset</code> — Undoing Commits</h3>
+          <p class="lesson__text">Three modes: <b>soft</b> (undo the commit, keep changes staged), <b>mixed</b> — the default (undo the commit and unstage, but keep your file edits), and <b>hard</b> (discard everything — use with real care).</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git reset --soft HEAD~1</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>You committed a feature by mistake before it was ready. <code>git reset --soft HEAD~1</code> undoes just the commit, letting you fix it and recommit cleanly.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 23</span>
+          <h3 class="lesson__title">Working with Tags — Marking Important Versions</h3>
+          <p class="lesson__text">A tag is a permanent label marking a meaningful point in history — usually a release version, like <code>v1.0</code>.</p>
+          <div class="codebox">
+            <div class="codebox__bar"><svg><use href="#i-terminal"></use></svg><span>terminal</span></div>
+            <pre><span class="p">$</span> git tag v1.0
+<span class="p">$</span> git push origin v1.0</pre>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>When you submit your final-year project, tag that exact commit as <code>final-submission</code>, so you and your evaluator can always find that precise version later, even after you keep coding past it.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg hide"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 24</span>
+          <h3 class="lesson__title"><code>revert</code> vs. <code>reset</code> vs. <code>checkout</code></h3>
+          <p class="lesson__text"><code>git revert</code> creates a <b>new</b> commit that undoes an earlier one — safe for shared/team work since history stays intact. <code>git reset</code> rewrites history — only safe on your own local, unshared commits. <code>git checkout</code> (or <code>restore</code>) lets you view old versions or discard changes to specific files, without touching history at all.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>If a bug was already pushed to a shared GitHub repo your whole team uses, use <code>git revert</code> — it won't erase history your teammates already have. If it's just your own local mistake, not yet pushed, <code>git reset</code> is perfectly fine.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== UNIT 5 ===================== -->
+  <section class="unit unit--5" id="unit-5">
+    <div class="unit__header">
+      <div class="unit__num">05</div>
+      <div>
+        <div class="unit__title">Introduction to GitHub</div>
+        <div class="unit__desc">Repositories, issues, pull requests, forking, and the real team workflow used at companies.</div>
+      </div>
+      <div class="unit__hours">HOURS 25–30</div>
+    </div>
+
+    <div class="track">
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg hide"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 25</span>
+          <h3 class="lesson__title">Navigating the GitHub Interface</h3>
+          <p class="lesson__text">A guided tour of a repository page: the Code tab, README display, Issues, Pull Requests, commit history, file structure, and the green "Code" button used for cloning.</p>
+          <div class="callout callout--why">
+            <svg class="icon"><use href="#i-target"></use></svg>
+            <div><b class="tag">Why it matters for you</b>Before an internship interview, recruiters often open your GitHub profile and click straight into your repositories — knowing how to make this look clean and organised genuinely matters.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 26</span>
+          <h3 class="lesson__title">Creating &amp; Managing Repositories on GitHub</h3>
+          <p class="lesson__text">How to create a new repository directly on GitHub, choose public or private, add a <code>README.md</code> describing the project, and a <code>.gitignore</code> that tells Git which files to ignore (like temporary build files).</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>A good README with a project description, screenshots, and setup steps is often the very first thing a recruiter or teammate reads — make it count.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 27</span>
+          <h3 class="lesson__title">Issues — Tracking Bugs and Tasks</h3>
+          <p class="lesson__text">An "Issue" on GitHub is a ticket for a bug, task, or idea that needs attention — with comments, labels like <code>bug</code> or <code>enhancement</code>, and assignees.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>A team building a library-management system opens issues like "Search bar not working on mobile" and "Add fine-calculation feature," then assigns each one to a team member — a shared to-do board for the entire project.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 28</span>
+          <h3 class="lesson__title">Pull Requests — Proposing and Reviewing Changes</h3>
+          <p class="lesson__text">A Pull Request (PR) formally asks to merge your branch's changes into another branch — usually <code>main</code> — giving teammates the chance to review and comment before it's accepted.</p>
+          <div class="callout callout--why">
+            <svg class="icon"><use href="#i-target"></use></svg>
+            <div><b class="tag">Why it matters for you</b>This is exactly how real companies and open-source projects work: nobody pushes straight to <code>main</code>; every change goes through a Pull Request and review first. Practising this in college prepares you directly for industry workflow.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 29</span>
+          <h3 class="lesson__title">Forking Repositories</h3>
+          <p class="lesson__text">Forking creates your own personal copy of someone else's repository, under your own account, which you can freely modify without affecting their original project.</p>
+          <div class="callout">
+            <svg class="icon"><use href="#i-bulb"></use></svg>
+            <div><b class="tag">Real-world example</b>Want to contribute to a popular open-source project, or build on a senior's old project as your own mini-project? Fork it, make your changes, and optionally send a Pull Request back to the original.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson">
+        <div class="lesson__rail"><div class="seg"></div><div class="lesson__dot"></div><div class="seg hide"></div></div>
+        <div class="lesson__card">
+          <span class="lesson__hour">HOUR 30</span>
+          <h3 class="lesson__title">Git Cheat Sheet &amp; Final Mini Project</h3>
+          <p class="lesson__text">A quick recap of every command learned across all 30 hours — see the full cheat sheet below.</p>
+          <div class="callout callout--why">
+            <svg class="icon"><use href="#i-target"></use></svg>
+            <div><b class="tag">Final hands-on project</b>Create a personal portfolio repository on GitHub: add a README about yourself, create a feature branch, make a few commits, open a Pull Request, merge it, and tag the result as <code>v1.0</code>. By the end of today, you'll have a real, working portfolio piece to show in interviews.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== CHEAT SHEET ===================== -->
+  <section class="cheat" id="cheat-sheet">
+    <h2>Quick-Reference Cheat Sheet</h2>
+    <p class="sub">Every command from all 30 hours, grouped by what it does.</p>
+    <div class="cheat__grid">
+      <div class="cheat__row"><code>git init</code><span>start tracking a new project</span></div>
+      <div class="cheat__row"><code>git clone &lt;url&gt;</code><span>download an existing repo</span></div>
+      <div class="cheat__row"><code>git status</code><span>see what's changed</span></div>
+      <div class="cheat__row"><code>git add &lt;file&gt;</code><span>stage a change</span></div>
+      <div class="cheat__row"><code>git commit -m "msg"</code><span>save a snapshot</span></div>
+      <div class="cheat__row"><code>git push</code><span>upload commits to GitHub</span></div>
+      <div class="cheat__row"><code>git pull</code><span>download &amp; merge new commits</span></div>
+      <div class="cheat__row"><code>git fetch</code><span>download without merging</span></div>
+      <div class="cheat__row"><code>git branch &lt;name&gt;</code><span>create a branch</span></div>
+      <div class="cheat__row"><code>git switch &lt;name&gt;</code><span>move to a branch</span></div>
+      <div class="cheat__row"><code>git merge &lt;name&gt;</code><span>combine a branch into current one</span></div>
+      <div class="cheat__row"><code>git branch -d &lt;name&gt;</code><span>delete a merged branch</span></div>
+      <div class="cheat__row"><code>git log</code><span>view commit history</span></div>
+      <div class="cheat__row"><code>git diff</code><span>compare changes line by line</span></div>
+      <div class="cheat__row"><code>git stash</code><span>park unfinished work</span></div>
+      <div class="cheat__row"><code>git reset</code><span>undo commits (rewrites history)</span></div>
+      <div class="cheat__row"><code>git revert</code><span>undo safely with a new commit</span></div>
+      <div class="cheat__row"><code>git tag v1.0</code><span>mark a release point</span></div>
+    </div>
+  </section>
+
+  <div class="closing">
+    <h3>Build it. Break it. Fix it.</h3>
+    <p>That's genuinely how Git is learned — open a terminal, create a throwaway folder, and try every command in this guide for yourself. By Hour 30 you'll have a real portfolio repository to show for it.</p>
+    <div class="badge">30 hours · 5 units · 2 credits · 1 GitHub portfolio</div>
+  </div>
+
+</div>
+</body>
+</html>
